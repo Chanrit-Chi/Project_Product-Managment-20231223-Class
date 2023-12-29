@@ -1,0 +1,108 @@
+// This implement only for the input field
+// product name, code, price, stock in ......
+#pragma once
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include "Validator.cpp"
+using namespace std;
+
+class Product
+{
+private:
+    int productID;
+    string ProductName;
+    double price;
+    int stock_in;
+
+public:
+    Product() // default constructor
+    {
+        this->productID = 0;
+        this->ProductName = "Unknown";
+        this->price = 0;
+        this->stock_in = 0;
+    }
+
+    // parameterize constructor
+    Product(int productID, string ProductName, double price, int stock_in)
+    {
+        this->productID = productID;
+        this->ProductName = ProductName;
+        this->price = price;
+        this->stock_in = stock_in;
+    }
+    // copy constructor
+
+    Product(const Product &prod)
+    {
+        this->productID = prod.productID;
+        this->ProductName = prod.ProductName;
+        this->price = prod.price;
+        this->stock_in = prod.stock_in;
+    }
+    // destructor: best practice to use destructor
+    ~Product(){};
+
+    // setter and getter
+    void setProductID(const int &productID)
+    {
+        if (Validator::isValidProductID(productID))
+        {
+            this->productID = productID;
+        }
+        else
+        {
+            cout << "Invalid id" << endl;
+        }
+    }
+    int getProductID() const
+    {
+        return productID;
+    }
+    void setName(const string ProductName)
+    {
+        if (Validator::isValidProductName(ProductName))
+        {
+            this->ProductName = ProductName;
+        }
+        else
+        {
+            cout << "Product name can not be emptied" << endl;
+        }
+    }
+    string getProductName() const
+    {
+        return ProductName;
+    }
+    void setPrice(const double price)
+    {
+        if (Validator::isValidPrice(price))
+        {
+            this->price = price;
+        }
+        else
+        {
+            cout << "Invalid price!" << endl;
+        }
+    }
+    double getPrice() const
+    {
+        return price;
+    }
+    void setStock(const int stock_in)
+    {
+        if (Validator::isValidStock(stock_in))
+        {
+            this->stock_in = stock_in;
+        }
+        else
+        {
+            cout << "Invalid stock!" << endl;
+        }
+    }
+    int getStock() const
+    {
+        return stock_in;
+    }
+};
