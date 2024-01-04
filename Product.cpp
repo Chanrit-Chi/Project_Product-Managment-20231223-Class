@@ -105,4 +105,11 @@ public:
     {
         return stock_in;
     }
+
+    void GetDisplay (){
+        cout <<getProductID<<setw(20)
+            <<getProductName<<setw (20)
+            <<getPrice<<setw(20)<<getStock<<endl;
+
+    }
 };
