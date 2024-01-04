@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class ProductManager: product(){
+class ProductManager{
 
 
 
