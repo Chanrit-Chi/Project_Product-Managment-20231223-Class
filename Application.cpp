@@ -43,7 +43,7 @@ public:
             switch (option)
             {
             case 1:
-                ProdManager.AddProduct(Products, ProductCount);
+                ProdManager.AddProduct(Products);
                 break;
 
             default:

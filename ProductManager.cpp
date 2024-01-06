@@ -3,6 +3,7 @@
 #include <string>
 #include <iomanip>
 #include <vector>
+#include <algorithm>
 #include "Product.cpp"
 #include "Validator.cpp"
 
@@ -16,20 +17,19 @@ private:
     int StockIN;
 
 public:
-    void AddProduct(std::vector<Product *> &products, int &ProductCount)
+    void AddProduct(vector<Product *> &products)
     {
-        int NextProductID = 1 + ProductCount;
+        int NextProductID = 1 + products.size();
         cout << "Enter Product Name: ";
         cin >> ProductName;
-        products[ProductCount]->setProductName(ProductName);
+        // products[ProductCount]->setProductName(ProductName);
         cout << "Enter product price: ";
         cin >> Price;
-        products[ProductCount]->setPrice(Price);
+        // products[ProductCount]->setPrice(Price);
         cout << "Enter product stock: ";
         cin >> StockIN;
-        products[ProductCount]->setStock(StockIN);
+        // products[ProductCount]->setStock(StockIN);
         products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
-        ProductCount++;
     }
     void Delete_Product(Product *products[], int ProductCount)
     {
@@ -38,14 +38,14 @@ public:
             delete products[i];
         }
     }
-    void AddProductMENU(Product *products[], int &ProductCount)
+    void AddProductMENU(vector<Product *> &products)
     {
         char add_more = 'y';
         do
         {
             std::cout << "Selected option: Add product \n\n";
             // call the AddProduct function to ask for the product information and add it to the array
-            AddProduct(products, ProductCount);
+            AddProduct(products);
             std::cout << "\nProduct added!\n"
                       << std::endl;
             std::cout << "Do you want to add more product?(y/n): " << std::endl;
@@ -145,6 +145,27 @@ public:
         else
         {
             cout << "Product not found!" << endl;
+        }
+    }
+
+    void DeleteProduct(vector<Product *> &products, int productIdToDelete)
+    {
+        auto it = find_if(products.begin(), products.end(),
+                          [productIdToDelete](const Product *product)
+                          {
+                              return product->getProductID() == productIdToDelete;
+                          });
+
+        if (it != products.end())
+        {
+            // Product found, delete it
+            delete *it;
+            products.erase(it);
+            cout << "Product deleted successfully." << endl;
+        }
+        else
+        {
+            cout << "Product not found." << endl;
         }
     }
 };
