@@ -60,7 +60,7 @@ public:
     {
         return productID;
     }
-    void setName(const string ProductName)
+    void setProductName(const string ProductName)
     {
         if (Validator::isValidProductName(ProductName))
         {
@@ -104,5 +104,17 @@ public:
     int getStock() const
     {
         return stock_in;
+    }
+
+    void GetDisplay()
+    {
+        cout << getProductID << setw(20)
+             << getProductName << setw(20)
+             << getPrice << setw(20) << getStock << endl;
+    }
+    void GetDisplayHeader()
+    {
+        cout << "Product ID " << setw(20) << "Product Name "
+             << setw(20) << "Price" << setw(20) << "Stock " << endl;
     }
 };
