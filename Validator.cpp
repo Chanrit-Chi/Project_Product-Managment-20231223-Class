@@ -49,4 +49,17 @@ public:
     {
         return getStock >= 0;
     }
+
+    // Validate Input numeric data
+    int getValidInput()
+    { // This is to put constrain on number input
+        int input;
+        while (!(cin >> input))
+        {
+            cin.clear();                                         // Clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
+            cout << "Invalid input. Please enter a valid option: ";
+        }
+        return input;
+    }
 };
