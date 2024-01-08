@@ -34,6 +34,7 @@ public:
         ProductCount++;
     }
     void Delete_Product(Product *products[], int ProductCount)
+
     {
         for (int i = 0; i < ProductCount; ++i)
         {
