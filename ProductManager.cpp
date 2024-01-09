@@ -31,14 +31,16 @@ public:
         // products[ProductCount]->setStock(StockIN);
         products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
     }
-    void Delete_Product(Product *products[], int ProductCount)
-
+    void Delete_Product(vector<Product *> &products)
     {
-        for (int i = 0; i < ProductCount; ++i)
+        // Delete each product in the vector
+        for (Product *product : products)
         {
-            delete products[i];
+            delete product;
         }
+        products.clear();
     }
+
     void AddProductMENU(vector<Product *> &products)
     {
         char add_more = 'y';
@@ -53,12 +55,14 @@ public:
             std::cin >> add_more;
         } while (add_more == 'y' || add_more == 'Y');
     }
-    int searchByID(Product products[], int &count, int key)
+
+    // Function overloading to seach product by ID and name
+    int searchProduct(const Product products[], int count, int id)
     {
 
         for (int i = 0; i < count; i++)
         {
-            if (products[i].getProductID() == key)
+            if (products[i].getProductID() == id)
             {
                 return i;
             }
@@ -66,15 +70,15 @@ public:
         return -1;
     }
     // Search product by name
-    int searchByName(Product products[], int count, string key)
+    int searchProduct(const Product products[], int count, string &name)
     {
-
-        transform(key.begin(), key.end(), key.begin(), tolower);
+        string lowerName = name;
+        transform(name.begin(), name.end(), name.begin(), tolower);
         for (int i = 0; i < count; i++)
         {
             string productName = products[i].getProductName();
             transform(productName.begin(), productName.end(), productName.begin(), tolower);
-            if (productName == key)
+            if (productName == lowerName)
             {
                 return i;
             }
@@ -82,19 +86,37 @@ public:
         return -1;
     }
 
+    int searchProductMenu(const Product products[], int count)
+    {
+        string UserInput;
+        cout << "Please enter ID or name to seach: ";
+        cin >> UserInput;
+        try
+        {
+            int id = stoi(UserInput);
+            return searchProduct(products, count, id);
+        }
+        catch (const std::invalid_argument &)
+        {
+            return searchProduct(products, count, UserInput);
+        }
+        catch (const std::out_of_range &)
+        {
+            cout << "Input is out of range." << endl;
+            return -1;
+        }
+    }
+
     void update_product(Product products[], int num_products, int productID_to_update, string productName_to_update, bool searchByID)
     {
         int index_to_update = -1; // The index of the product in the array (initially set to -1 because to make sure there is index number at the start)
-        transform(productName_to_update.begin(), productName_to_update.end(), productName_to_update.begin(), tolower);
-        for (int i = 0; i < num_products; i++)
+        if (searchByID)
         {
-            string productName = products[i].getProductName();
-            transform(productName.begin(), productName.end(), productName.begin(), tolower);
-            if ((searchByID && products[i].getProductID() == productID_to_update) || (!searchByID && productName == productName_to_update))
-            {
-                index_to_update = i;
-                break;
-            }
+            index_to_update = searchProduct(products, num_products, productID_to_update);
+        }
+        else
+        {
+            index_to_update = searchProduct(products, num_products, productName_to_update);
         }
         // Check if a product with the specified ID or name was found
         if (index_to_update != -1)
@@ -149,19 +171,32 @@ public:
         }
     }
 
-    void DeleteProduct(vector<Product *> &products, int productIdToDelete)
+    void DeleteProduct(Product products[], int &count, string &key, bool searchByID)
     {
-        auto it = find_if(products.begin(), products.end(),
-                          [productIdToDelete](const Product *product)
-                          {
-                              return product->getProductID() == productIdToDelete;
-                          });
+        int indexToDelete = -1;
 
-        if (it != products.end())
+        try
+        {
+            // Attempt to convert the key to an integer
+            int id = stoi(key);
+
+            // Call the appropriate search function based on searchByID
+            if (searchByID)
+            {
+                indexToDelete = searchProduct(products, count, id);
+            }
+        }
+        catch (invalid_argument &) // Key is not a number
+        {
+            // Searching by name
+            indexToDelete = searchProduct(products, count, key);
+        }
+
+        if (indexToDelete != -1)
         {
             // Product found, delete it
-            delete *it;
-            products.erase(it);
+            products[indexToDelete] = products[count - 1];
+            count--;
             cout << "Product deleted successfully." << endl;
         }
         else
@@ -169,4 +204,6 @@ public:
             cout << "Product not found." << endl;
         }
     }
+
+    // Sort product
 };
