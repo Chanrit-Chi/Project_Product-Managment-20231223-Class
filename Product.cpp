@@ -14,6 +14,7 @@ private:
     string ProductName;
     double price;
     int stock_in;
+    Validator validator;
 
 public:
     Product() // default constructor
@@ -47,7 +48,7 @@ public:
     // setter and getter
     void setProductID(const int &productID)
     {
-        if (Validator::isValidProductID(productID))
+        if (validator.isValidProductID(productID))
         {
             this->productID = productID;
         }
@@ -62,7 +63,7 @@ public:
     }
     void setProductName(const string ProductName)
     {
-        if (Validator::isValidProductName(ProductName))
+        if (validator.isValidProductName(ProductName))
         {
             this->ProductName = ProductName;
         }
@@ -77,7 +78,7 @@ public:
     }
     void setPrice(const double price)
     {
-        if (Validator::isValidPrice(price))
+        if (validator.isValidPrice(price))
         {
             this->price = price;
         }
@@ -92,7 +93,7 @@ public:
     }
     void setStock(const int stock_in)
     {
-        if (Validator::isValidStock(stock_in))
+        if (validator.isValidStock(stock_in))
         {
             this->stock_in = stock_in;
         }

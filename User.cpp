@@ -14,6 +14,7 @@ private:
     string password;
     string address;
     string phone;
+    Validator validator;
 
 public:
     User() // Default constructor
@@ -46,7 +47,7 @@ public:
 
     void setName(const string &name)
     {
-        if (Validator::isValidName(name))
+        if (validator.isValidName(name))
         {
             this->name = name;
         }
@@ -61,7 +62,7 @@ public:
     }
     void setPassword(const string &password)
     {
-        if (Validator::isValidPassword(password))
+        if (validator.isValidPassword(password))
         {
             this->password = password;
         }
@@ -76,7 +77,7 @@ public:
     }
     void setAddress(const string address)
     {
-        if (Validator::isValidAddress(address))
+        if (validator.isValidAddress(address))
         {
             this->address = address;
         }
@@ -91,7 +92,7 @@ public:
     }
     void setPhone(const string phone)
     {
-        if (Validator::isValidPhone(phone))
+        if (validator.isValidPhone(phone))
         {
             this->phone = phone;
         }
@@ -106,8 +107,7 @@ public:
         return phone;
     }
 
-
-    void acc_login(){
-        
+    void acc_login()
+    {
     }
 };

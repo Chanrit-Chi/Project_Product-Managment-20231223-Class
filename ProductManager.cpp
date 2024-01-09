@@ -73,11 +73,11 @@ public:
     int searchProduct(const Product products[], int count, string &name)
     {
         string lowerName = name;
-        transform(name.begin(), name.end(), name.begin(), tolower);
+        // transform(name.begin(), name.end(), name.begin(), tolower);
         for (int i = 0; i < count; i++)
         {
             string productName = products[i].getProductName();
-            transform(productName.begin(), productName.end(), productName.begin(), tolower);
+            // transform(productName.begin(), productName.end(), productName.begin(), tolower);
             if (productName == lowerName)
             {
                 return i;
