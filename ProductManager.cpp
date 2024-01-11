@@ -95,7 +95,11 @@ public:
         try
         {
             int id = stoi(UserInput);
-            return searchProduct(products, count, id);
+            int index = searchProduct(products, count, id);
+            if (index != -1)
+            {
+                products[index].
+            }
         }
         catch (const invalid_argument &)
         {
