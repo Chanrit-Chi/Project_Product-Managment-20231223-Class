@@ -31,6 +31,7 @@ public:
         // products[ProductCount]->setStock(StockIN);
         products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
     }
+    // Destructor
     void Delete_Product(vector<Product *> &products)
     {
         // Delete each product in the vector
@@ -96,11 +97,11 @@ public:
             int id = stoi(UserInput);
             return searchProduct(products, count, id);
         }
-        catch (const std::invalid_argument &)
+        catch (const invalid_argument &)
         {
             return searchProduct(products, count, UserInput);
         }
-        catch (const std::out_of_range &)
+        catch (const out_of_range &)
         {
             cout << "Input is out of range." << endl;
             return -1;
