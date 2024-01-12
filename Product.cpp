@@ -107,13 +107,13 @@ public:
         return stock_in;
     }
 
-    void GetDisplay()
+    void GetDisplay() const
     {
         cout << getProductID << setw(20)
              << getProductName << setw(20)
              << getPrice << setw(20) << getStock << endl;
     }
-    void GetDisplayHeader()
+    void GetDisplayHeader() const
     {
         cout << "Product ID " << setw(20) << "Product Name "
              << setw(20) << "Price" << setw(20) << "Stock " << endl;

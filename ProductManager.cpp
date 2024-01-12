@@ -98,16 +98,30 @@ public:
             int index = searchProduct(products, count, id);
             if (index != -1)
             {
-                products[index].
+                products[index].GetDisplayHeader();
+                products[index].GetDisplay();
+            }
+            else
+            {
+                cout << "Product not found." << endl;
             }
         }
         catch (const invalid_argument &)
         {
-            return searchProduct(products, count, UserInput);
+            int index = searchProduct(products, count, UserInput);
+            if (index != -1)
+            {
+                products[index].GetDisplayHeader();
+                products[index].GetDisplay();
+            }
+            else
+            {
+                cout << "Product not found." << endl;
+            }
         }
         catch (const out_of_range &)
         {
-            cout << "Input is out of range." << endl;
+            cout << "Invalid input. Please enter ID or Name of product." << endl;
             return -1;
         }
     }
