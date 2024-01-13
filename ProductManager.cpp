@@ -15,6 +15,7 @@ private:
     string ProductName;
     double Price;
     int StockIN;
+    Validator validateNum;
 
 public:
     void AddProduct(vector<Product *> &products)
@@ -47,14 +48,19 @@ public:
         char add_more = 'y';
         do
         {
-            std::cout << "Selected option: Add product \n\n";
+            cout << "Selected option: Add product \n\n";
             // call the AddProduct function to ask for the product information and add it to the array
             AddProduct(products);
-            std::cout << "\nProduct added!\n"
-                      << std::endl;
-            std::cout << "Do you want to add more product?(y/n): " << std::endl;
-            std::cin >> add_more;
+            cout << "\nProduct added!\n"
+                 << endl;
+            cout << "Do you want to add more product?(y/n): " << endl;
+            cin >> add_more;
         } while (add_more == 'y' || add_more == 'Y');
+    }
+    void ViewProduct(const Product &products) const
+    {
+        products.GetDisplayHeader();
+        products.GetDisplay();
     }
 
     // Function overloading to seach product by ID and name
@@ -150,7 +156,6 @@ public:
             cout << "0. Exit\n"
                  << endl;
             int option;
-            Validator validateNum;
             option = validateNum.getValidInput();
 
             // update the product value based on the option
@@ -225,4 +230,80 @@ public:
     }
 
     // Sort product
+    bool compareByID(const Product *a, const Product *b)
+    { // compare the list in array of product_list
+        return a->getProductID() < b->getProductID();
+    }
+
+    bool compareByName(const Product *a, const Product *b)
+    { // compare the list in array of product_list
+        return a->getProductName() < b->getProductName();
+    }
+
+    void sortProduct(Product products[])
+    {
+        int choice = -1;
+        while (choice != 0)
+        {
+            cout << "\nPlease select option for sorting:\n"
+                 << "1. Sort by ID\n"
+                 << "2. Sort by name\n"
+                 << "0. Exit\n";
+            choice = validateNum.getValidInput();
+            if (choice == 0)
+            {
+                break;
+            }
+            while (choice == 0)
+            {
+                cout << "\nPlease select the sorting order:\n"
+                     << "1. Sort by Ascending\n"
+                     << "2. Sort by Descending\n"
+                     << "0. Exit\n";
+                choice = validateNum.getValidInput();
+                if (choice == 0)
+                {
+                    break;
+                }
+                switch (choice)
+                {
+                case 1:
+                {
+                    if (choice == 1)
+                    {
+                        sort(products, products + sizeof(products) / sizeof(0), compareByID);
+                    }
+                    else if (choice == 2)
+                    {
+                        sort(products, products + sizeof(products) / sizeof(products[0]), compareByID);
+                        reverse(products, products + sizeof(products) / sizeof(products[0]));
+                    }
+                }
+                break;
+                case 2:
+                {
+                    if (choice == 1)
+                    {
+                        sort(products, products + sizeof(products) / sizeof(0), compareByName);
+                    }
+                    else if (choice == 2)
+                    {
+                        sort(products, products + sizeof(products) / sizeof(products[0]), compareByName);
+                        reverse(products, products + sizeof(products) / sizeof(products[0]));
+                    }
+                }
+                break;
+
+                default:
+                    break;
+                }
+                cout << "\nSorted products\n";
+                products[0].GetDisplayHeader();
+                for (int i = 0; i < sizeof(products) / sizeof(products[0]); ++i)
+                {
+                    products[i].GetDisplay();
+                }
+            }
+        }
+    }
 };
