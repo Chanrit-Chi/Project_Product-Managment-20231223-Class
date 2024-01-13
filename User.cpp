@@ -1,6 +1,5 @@
 // This implement only for the input field
 // ID, name, ......
-#pragma once
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -14,9 +13,9 @@ private:
     string password;
     string address;
     string phone;
-    Validator validator;
 
 public:
+    Validator validator;
     User() // Default constructor
     {
         this->name = "Unknow";

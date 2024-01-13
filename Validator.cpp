@@ -1,11 +1,9 @@
-#pragma once
-#include <string>
 #include <regex>
-#include "User.cpp"
 #include "Product.cpp"
+#include <string>
 using namespace std;
 
-class Validator : public User, public Product
+class Validator
 
 {
 public:

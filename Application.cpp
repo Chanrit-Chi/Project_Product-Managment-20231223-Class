@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <vector>
 #include "Product.cpp"
@@ -26,7 +25,7 @@ public:
         return choice;
     }
 
-    void input()
+    void run()
     {
         char choice;
         do
@@ -43,8 +42,10 @@ public:
             switch (option)
             {
             case 1:
+            {
                 ProdManager.AddProduct(Products);
                 break;
+            }
 
             default:
                 break;

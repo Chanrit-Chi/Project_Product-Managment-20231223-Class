@@ -1,10 +1,11 @@
 // This implement only for the input field
 // product name, code, price, stock in ......
 #pragma once
+#include "Validator.cpp"
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include "Validator.cpp"
+
 using namespace std;
 
 class Product
@@ -109,9 +110,9 @@ public:
 
     void GetDisplay() const
     {
-        cout << getProductID << setw(20)
-             << getProductName << setw(20)
-             << getPrice << setw(20) << getStock << endl;
+        cout << getProductID() << setw(20)
+             << getProductName() << setw(20)
+             << getPrice() << setw(20) << getStock() << endl;
     }
     void GetDisplayHeader() const
     {
