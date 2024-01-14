@@ -15,9 +15,9 @@ private:
     string ProductName;
     double price;
     int stock_in;
-    Validator validator;
 
 public:
+    Validator validator;
     Product() // default constructor
     {
         this->productID = 0;

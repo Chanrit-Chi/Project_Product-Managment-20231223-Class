@@ -1,5 +1,6 @@
 // This implement only for the input field
 // ID, name, ......
+#pragma once
 #include <iostream>
 #include <iomanip>
 #include <string>
