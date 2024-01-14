@@ -240,7 +240,7 @@ public:
         return a->getProductName() < b->getProductName();
     }
 
-    void sortProduct(Product products[])
+    void sortProduct(vector<Product *> &products)
     {
         int choice = -1;
         while (choice != 0)
@@ -271,12 +271,12 @@ public:
                 {
                     if (choice == 1)
                     {
-                        sort(products, products + sizeof(products) / sizeof(0), compareByID);
+                        sort(products.begin(), products.end(), compareByID);
                     }
                     else if (choice == 2)
                     {
-                        sort(products, products + sizeof(products) / sizeof(products[0]), compareByID);
-                        reverse(products, products + sizeof(products) / sizeof(products[0]));
+                        sort(products.begin(), products.end(), compareByID);
+                        reverse(products.begin(), products.end());
                     }
                 }
                 break;
@@ -284,12 +284,12 @@ public:
                 {
                     if (choice == 1)
                     {
-                        sort(products, products + sizeof(products) / sizeof(0), compareByName);
+                        sort(products.begin(), products.end(), compareByName);
                     }
                     else if (choice == 2)
                     {
-                        sort(products, products + sizeof(products) / sizeof(products[0]), compareByName);
-                        reverse(products, products + sizeof(products) / sizeof(products[0]));
+                        sort(products.begin(), products.end(), compareByName);
+                        reverse(products.begin(), products.end());
                     }
                 }
                 break;
@@ -298,10 +298,10 @@ public:
                     break;
                 }
                 cout << "\nSorted products\n";
-                products[0].GetDisplayHeader();
-                for (int i = 0; i < sizeof(products) / sizeof(products[0]); ++i)
+                products[0]->GetDisplayHeader();
+                for (auto product : products)
                 {
-                    products[i].GetDisplay();
+                    product->GetDisplay();
                 }
             }
         }
