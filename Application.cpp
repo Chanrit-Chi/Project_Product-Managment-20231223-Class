@@ -15,18 +15,17 @@ private:
     vector<Product *> Products;
     ProductManager ProdManager;
     Validator ValidInput;
-    int ProductCount = 0;
 
 public:
     void run()
     {
 
         int choice;
-        cout << "\t Please choose an option (1-2): ";
-        cin >> choice;
         char choice1;
         do
         {
+            cout << "\t Please choose an option (1-2): ";
+            cin >> choice;
             cout << "Product Management Menu: \n"
                  << "1. Add Product\n"
                  << "2. Update Product\n"
@@ -35,8 +34,8 @@ public:
                  << "5. Sort Product\n"
                  << "6. Delete Product\n"
                  << "0. Exit" << endl;
-            int option = ValidInput.getValidInput();
-            switch (option)
+            choice = ValidInput.getValidInput();
+            switch (choice)
             {
             case 1:
             {
