@@ -25,7 +25,7 @@ public:
         do
         {
             cout << "\t Please choose an option (1-2): ";
-            cin >> choice;
+            choice = ValidInput.getValidInput();
             cout << "Product Management Menu: \n"
                  << "1. Add Product\n"
                  << "2. Update Product\n"
@@ -34,7 +34,6 @@ public:
                  << "5. Sort Product\n"
                  << "6. Delete Product\n"
                  << "0. Exit" << endl;
-            choice = ValidInput.getValidInput();
             switch (choice)
             {
             case 1:
