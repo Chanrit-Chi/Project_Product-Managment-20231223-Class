@@ -46,6 +46,8 @@ public:
             default:
                 break;
             }
+            cout << "Do you want to perform another operation? (y/n): ";
+            cin >> choice1;
         } while (choice1 == 'y' || choice1 == 'Y');
     }
 };
