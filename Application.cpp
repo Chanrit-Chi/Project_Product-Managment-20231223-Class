@@ -20,14 +20,11 @@ private:
 public:
     void run()
     {
-        int GetChoice()
-        {
-            int choice;
-            cout << "\t Please choose an option (1-2): ";
-            cin >> choice;
-            return choice;
-        };
-        char choice;
+
+        int choice;
+        cout << "\t Please choose an option (1-2): ";
+        cin >> choice;
+        char choice1;
         do
         {
             cout << "Product Management Menu: \n"
@@ -50,6 +47,6 @@ public:
             default:
                 break;
             }
-        } while (choice == 'y' || choice == 'Y');
+        } while (choice1 == 'y' || choice1 == 'Y');
     }
 };
