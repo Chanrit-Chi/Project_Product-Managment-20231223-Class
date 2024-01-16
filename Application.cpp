@@ -18,16 +18,15 @@ private:
     int ProductCount = 0;
 
 public:
-    int GetChoice()
-    {
-        int choice;
-        cout << "\t Please choose an option (1-2): ";
-        cin >> choice;
-        return choice;
-    }
-
     void run()
     {
+        int GetChoice()
+        {
+            int choice;
+            cout << "\t Please choose an option (1-2): ";
+            cin >> choice;
+            return choice;
+        };
         char choice;
         do
         {

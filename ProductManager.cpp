@@ -230,12 +230,12 @@ public:
     }
 
     // Sort product
-    bool compareByID(const Product *a, const Product *b)
-    { // compare the list in array of product_list
+    static bool compareByID(const Product *a, const Product *b)
+    {
         return a->getProductID() < b->getProductID();
-    }
+    };
 
-    bool compareByName(const Product *a, const Product *b)
+    static bool compareByName(const Product *a, const Product *b)
     { // compare the list in array of product_list
         return a->getProductName() < b->getProductName();
     }
@@ -243,60 +243,35 @@ public:
     void sortProduct(vector<Product *> &products)
     {
         int choice = -1;
-        while (choice != 0)
+        cout << "\nPlease select option for sorting:\n"
+             << "1. Sort by ID\n"
+             << "2. Sort by name\n"
+             << "0. Exit\n";
+        choice = validateNum.getValidInput();
+
+        if (choice != 0)
         {
-            cout << "\nPlease select option for sorting:\n"
-                 << "1. Sort by ID\n"
-                 << "2. Sort by name\n"
+            cout << "\nPlease select the sorting order:\n"
+                 << "1. Sort by Ascending\n"
+                 << "2. Sort by Descending\n"
                  << "0. Exit\n";
             choice = validateNum.getValidInput();
-            if (choice == 0)
+
+            if (choice != 0)
             {
-                break;
-            }
-            while (choice == 0)
-            {
-                cout << "\nPlease select the sorting order:\n"
-                     << "1. Sort by Ascending\n"
-                     << "2. Sort by Descending\n"
-                     << "0. Exit\n";
-                choice = validateNum.getValidInput();
-                if (choice == 0)
-                {
-                    break;
-                }
                 switch (choice)
                 {
                 case 1:
-                {
-                    if (choice == 1)
-                    {
-                        sort(products.begin(), products.end(), compareByID);
-                    }
-                    else if (choice == 2)
-                    {
-                        sort(products.begin(), products.end(), compareByID);
-                        reverse(products.begin(), products.end());
-                    }
-                }
-                break;
+                    sort(products.begin(), products.end(), compareByID);
+                    break;
                 case 2:
-                {
-                    if (choice == 1)
-                    {
-                        sort(products.begin(), products.end(), compareByName);
-                    }
-                    else if (choice == 2)
-                    {
-                        sort(products.begin(), products.end(), compareByName);
-                        reverse(products.begin(), products.end());
-                    }
-                }
-                break;
-
+                    sort(products.begin(), products.end(), compareByName);
+                    reverse(products.begin(), products.end());
+                    break;
                 default:
                     break;
                 }
+
                 cout << "\nSorted products\n";
                 products[0]->GetDisplayHeader();
                 for (auto product : products)
