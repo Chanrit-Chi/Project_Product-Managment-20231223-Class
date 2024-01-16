@@ -24,16 +24,17 @@ public:
         char choice1;
         do
         {
+            cout << "Product Management Menu: \n"
+                 << "\t1. Add Product\n"
+                 << "\t2. Update Product\n"
+                 << "\t3. Search Product\n"
+                 << "\t4. View Product\n"
+                 << "\t5. Sort Product\n"
+                 << "\t6. Delete Product\n"
+                 << "\t0. Exit" << endl;
             cout << "\t Please choose an option (1-2): ";
             choice = ValidInput.getValidInput();
-            cout << "Product Management Menu: \n"
-                 << "1. Add Product\n"
-                 << "2. Update Product\n"
-                 << "3. Search Product\n"
-                 << "4. View Product\n"
-                 << "5. Sort Product\n"
-                 << "6. Delete Product\n"
-                 << "0. Exit" << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             switch (choice)
             {
             case 1:
