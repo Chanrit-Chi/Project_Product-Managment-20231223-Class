@@ -21,7 +21,7 @@ public:
     {
 
         int choice;
-        char choice1;
+        int choice1;
         do
         {
             cout << "Product Management Menu: \n"
@@ -42,12 +42,19 @@ public:
                 ProdManager.AddProduct(Products);
                 break;
             }
+            case 2:
+            {
+                ProdManager.update_product(Products);
+            }
 
             default:
                 break;
             }
-            cout << "Do you want to perform another operation? (y/n): ";
-            cin >> choice1;
-        } while (choice1 == 'y' || choice1 == 'Y');
+            cout << "Do you want to perform another operation? " << endl;
+            cout << "1. Yes (continue)\n"
+                 << "2. No (exit)" << endl;
+            cout << "\nPlease choose an option: ";
+            choice1 = ValidInput.getValidInput();
+        } while (choice1 == 1);
     }
 };

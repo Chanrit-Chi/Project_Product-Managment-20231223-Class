@@ -20,17 +20,35 @@ private:
 public:
     void AddProduct(vector<Product *> &products)
     {
-        int NextProductID = 1 + products.size();
-        cout << "Enter Product Name: ";
-        cin >> ProductName;
-        // products[ProductCount]->setProductName(ProductName);
-        cout << "Enter product price: ";
-        cin >> Price;
-        // products[ProductCount]->setPrice(Price);
-        cout << "Enter product stock: ";
-        cin >> StockIN;
-        // products[ProductCount]->setStock(StockIN);
-        products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
+        char add_more;
+        do
+        {
+            int NextProductID = 1 + products.size();
+            cout << "Enter Product Name: ";
+            cin >> ProductName;
+            cout << "Enter product price: ";
+            cin >> Price;
+            cout << "Enter product stock: ";
+            cin >> StockIN;
+            products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
+            cout << "\t\t\n**Product added!**\n"
+                 << endl;
+            cout << "Do you want to add more product?(y/n): " << endl;
+            cin >> add_more;
+
+        } while (tolower(add_more) != 'n');
+    }
+    void AddProductMENU(vector<Product *> &products)
+    {
+        char add_more;
+        do
+        {
+            cout << "Selected option: Add product \n\n";
+            // call the AddProduct function to ask for the product information and add it to the array
+            AddProduct(products);
+            cout << "Do you want to add more product?(y/n): " << endl;
+            cin >> add_more;
+        } while (tolower(add_more) != 'n');
     }
     // Destructor
     void Delete_Product(vector<Product *> &products)
@@ -43,20 +61,6 @@ public:
         products.clear();
     }
 
-    void AddProductMENU(vector<Product *> &products)
-    {
-        char add_more = 'y';
-        do
-        {
-            cout << "Selected option: Add product \n\n";
-            // call the AddProduct function to ask for the product information and add it to the array
-            AddProduct(products);
-            cout << "\nProduct added!\n"
-                 << endl;
-            cout << "Do you want to add more product?(y/n): " << endl;
-            cin >> add_more;
-        } while (add_more == 'y' || add_more == 'Y');
-    }
     void ViewProduct(const Product &products) const
     {
         products.GetDisplayHeader();
@@ -132,16 +136,21 @@ public:
         }
     }
 
-    void update_product(Product products[], int num_products, int productID_to_update, string productName_to_update, bool searchByID)
+    void update_product(vector<Product *> &products)
     {
+        int productID_to_update;
+        string productName_to_update;
+        bool searchByID;
         int index_to_update = -1; // The index of the product in the array (initially set to -1 because to make sure there is index number at the start)
-        if (searchByID)
+        int newProductID;
+        for (int i = 0; i < products.size(); i++)
         {
-            index_to_update = searchProduct(products, num_products, productID_to_update);
-        }
-        else
-        {
-            index_to_update = searchProduct(products, num_products, productName_to_update);
+            Product *product = products[i];
+            if ((searchByID && product->getProductID() == productID_to_update) || (!searchByID && product->getProductName() == productName_to_update))
+            {
+                index_to_update = i;
+                break;
+            }
         }
         // Check if a product with the specified ID or name was found
         if (index_to_update != -1)
@@ -163,26 +172,32 @@ public:
             {
             case 1:
                 cout << "Enter new product ID: ";
-                products[index_to_update].setProductID(validateNum.getValidInput());
+                newProductID = validateNum.getValidInput();
+                products[index_to_update]->setProductID(newProductID); // Use -> for pointer dereferencing
                 break;
             case 2:
             {
                 string ProdName;
                 cout << "Enter new product name: ";
                 cin >> ProdName;
-                products[index_to_update].setProductName(ProdName);
+                products[index_to_update]->setProductName(ProdName); // Use -> for pointer dereferencing
                 break;
             }
             case 3:
+            {
                 double price;
                 cout << "Enter new product price: ";
                 cin >> price;
-                products[index_to_update].setPrice(price);
+                products[index_to_update]->setPrice(price); // Use -> for pointer dereferencing
                 break;
+            }
             case 4:
+            {
                 cout << "Enter new product stock: ";
-                products[index_to_update].setStock(validateNum.getValidInput());
+                int newStock = validateNum.getValidInput();
+                products[index_to_update]->setStock(newStock); // Use -> for pointer dereferencing
                 break;
+            }
             case 0:
                 break;
             default:
