@@ -31,7 +31,7 @@ public:
             cout << "\tEnter product stock: ";
             cin >> StockIN;
             products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
-            cout << "\t\nProduct added!\n"
+            cout << "\n\tProduct added!\n"
                  << endl;
             cout << "\tDo you want to add more product?(y/n): ";
             cin >> add_more;
@@ -177,23 +177,6 @@ public:
         default:
             cout << "\tInvalid option" << endl;
         }
-        // if (searchChoice == 1)
-        // {
-        //     cout << "\tEnter Product ID to update: ";
-        //     productID_to_update = validateNum.getValidInput();
-        //     // searchOption = true;
-        // }
-        // else if (searchChoice == 2)
-        // {
-        //     cout << "\tEnter Product Name to update: ";
-        //     cin >> productName_to_update;
-        //     searchOption = false;
-        // }
-        // else
-        // {
-        //     cout << "\tInvalid choice!" << endl;
-        //     return;
-        // }
         int index_to_update = -1; // The index of the product in the array (initially set to -1 because to make sure there is index number at the start)
         // Check if a product with the specified ID or name was found
         for (int i = 0; i < products.size(); i++)
@@ -228,7 +211,7 @@ public:
                 cout << "\tEnter new product ID: ";
                 newProductID = validateNum.getValidInput();
                 products[index_to_update]->setProductID(newProductID); // Use -> for pointer dereferencing
-                cout << "\t\nProduct updated!" << endl;
+                cout << "\tProduct updated!" << endl;
                 break;
             case 2:
             {
@@ -270,19 +253,15 @@ public:
 
     void DeleteProduct(vector<Product *> &products)
     {
-        bool searchByID;
+        bool search;
         string key;
         int indexToDelete = -1;
+        cout << "\tSearch product id or name to delete: ";
+        cin >> key;
         try
         {
-            // Attempt to convert the key to an integer
-            int id = stoi(key);
-
-            // Call the appropriate search function based on searchByID
-            if (searchByID)
-            {
-                indexToDelete = searchProduct(products, id);
-            }
+            int searchChoice = stoi(key);
+            indexToDelete = searchProduct(products, searchChoice);
         }
         catch (invalid_argument &) // Key is not a number
         {
@@ -318,12 +297,11 @@ public:
     void sortProduct(vector<Product *> &products)
     {
         int choice = -1;
-        cout << "\t\nProduct sorting:\n"
+        cout << "\tProduct sorting:\n"
              << "\t1. Sort by ID\n"
              << "\t2. Sort by name\n"
              << "\t0. Exit\n";
-        cout << "\t\nPlease select option for sorting: "
-             << "\n";
+        cout << "\n\tPlease select option for sorting: ";
         choice = validateNum.getValidInput();
 
         if (choice != 0)
@@ -364,7 +342,6 @@ public:
         cout << "\t\nProduct sorted by " << sortType << (sortOption == 1 ? " in Ascending" : " in Descending") << " order\n"
              << endl;
 
-        cout << "\t\nSorted products\n";
         if (!products.empty())
         {
             products[0]->GetDisplayHeader();

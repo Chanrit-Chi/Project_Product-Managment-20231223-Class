@@ -23,8 +23,9 @@ public:
         int choice;
         do
         {
-            cout << "\t\n\nProduct Management Menu: \n"
-                 << "\t1. Add Product\n"
+            cout << "\n\tProduct Management Menu: \n"
+                 << endl;
+            cout << "\t1. Add Product\n"
                  << "\t2. Update Product\n"
                  << "\t3. Search Product\n"
                  << "\t4. View Product\n"
@@ -34,8 +35,6 @@ public:
                  << endl;
             cout << "\tPlease choose an option: ";
             choice = ValidInput.getValidInput();
-            cout << "\n"
-                 << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             switch (choice)
             {

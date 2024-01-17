@@ -110,13 +110,13 @@ public:
 
     void GetDisplay() const
     {
-        cout << getProductID() << setw(20)
-             << getProductName() << setw(20)
-             << getPrice() << setw(20) << getStock() << endl;
+        cout << left << setw(15) << getProductID() << left << setw(20)
+             << getProductName() << '$' << fixed << left << setw(15)
+             << setprecision(2) << getPrice() << left << setw(15) << getStock() << endl;
     }
     void GetDisplayHeader() const
     {
-        cout << "Product ID " << setw(20) << "Product Name "
-             << setw(20) << "Price" << setw(20) << "Stock " << endl;
+        cout << left << setw(15) << "Product ID" << left << setw(20) << "Name" << left << setw(15) << "Price"
+             << left << setw(15) << "Stock" << endl;
     }
 };
