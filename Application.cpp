@@ -23,16 +23,19 @@ public:
         int choice;
         do
         {
-            cout << "\tProduct Management Menu: \n"
+            cout << "\t\n\nProduct Management Menu: \n"
                  << "\t1. Add Product\n"
                  << "\t2. Update Product\n"
                  << "\t3. Search Product\n"
                  << "\t4. View Product\n"
                  << "\t5. Sort Product\n"
                  << "\t6. Delete Product\n"
-                 << "\t0. Exit" << endl;
-            cout << "\tPlease choose an option (1-2): ";
+                 << "\t0. Exit\n"
+                 << endl;
+            cout << "\tPlease choose an option: ";
             choice = ValidInput.getValidInput();
+            cout << "\n"
+                 << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             switch (choice)
             {
@@ -50,6 +53,25 @@ public:
             {
                 ProdManager.searchProductMenu(Products);
                 break;
+            }
+            case 4:
+            {
+                ProdManager.ViewProduct(Products);
+                break;
+            }
+            case 5:
+            {
+                ProdManager.sortProduct(Products);
+                break;
+            }
+            case 6:
+            {
+                ProdManager.DeleteProduct(Products);
+                break;
+            }
+            case 0:
+            {
+                return;
             }
 
             default:

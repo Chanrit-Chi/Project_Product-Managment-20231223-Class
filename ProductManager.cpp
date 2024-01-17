@@ -24,16 +24,16 @@ public:
         do
         {
             int NextProductID = 1 + products.size();
-            cout << "Enter Product Name: ";
+            cout << "\tEnter Product Name: ";
             cin >> ProductName;
-            cout << "Enter product price: ";
+            cout << "\tEnter product price: ";
             cin >> Price;
-            cout << "Enter product stock: ";
+            cout << "\tEnter product stock: ";
             cin >> StockIN;
             products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
-            cout << "\t\t\n**Product added!**\n"
+            cout << "\t\nProduct added!\n"
                  << endl;
-            cout << "Do you want to add more product?(y/n): " << endl;
+            cout << "\tDo you want to add more product?(y/n): ";
             cin >> add_more;
             if (tolower(add_more) == 'n')
             {
@@ -52,10 +52,22 @@ public:
         products.clear();
     }
 
-    void ViewProduct(const Product &products) const
+    void ViewProduct(const vector<Product *> &products) const
     {
-        products.GetDisplayHeader();
-        products.GetDisplay();
+        if (!products.empty())
+        {
+            cout << "\t\nView all products\n"
+                 << endl;
+            products[0]->GetDisplayHeader();
+        }
+        else
+        {
+            cout << "Product is empty. Please add some products." << endl;
+        }
+        for (const Product *product : products)
+        {
+            product->GetDisplay();
+        }
     }
 
     // Function overloading to seach product by ID and name
@@ -91,7 +103,7 @@ public:
     int searchProductMenu(const vector<Product *> &products)
     {
         string UserInput;
-        cout << "Please enter ID or name to seach: ";
+        cout << "\tPlease enter ID or name to seach: ";
         cin >> UserInput;
         try
         {
@@ -104,7 +116,7 @@ public:
             }
             else
             {
-                cout << "Product not found." << endl;
+                cout << "\tProduct not found." << endl;
             }
         }
         catch (const invalid_argument &)
@@ -117,12 +129,12 @@ public:
             }
             else
             {
-                cout << "Product not found." << endl;
+                cout << "\tProduct not found." << endl;
             }
         }
         catch (const out_of_range &)
         {
-            cout << "Invalid input. Please enter ID or Name of product." << endl;
+            cout << "\tInvalid input. Please enter ID or Name of product." << endl;
             return -1;
         }
     }
@@ -134,29 +146,54 @@ public:
         bool searchOption;
         int newProductID;
 
-        cout << "\tDo you want to update the product by: \n"
+        cout << "\tSearch product for update by: "
+             << "\n"
              << "\t1. Product ID\n"
              << "\t2. Product name\n"
+             << "\t0. Exit"
              << endl;
-        cout << "\tEnter your choice: ";
+        cout << "\n\tEnter your choice: ";
         int searchChoice = validateNum.getValidInput();
-        if (searchChoice == 1)
+        switch (searchChoice)
+        {
+        case 1:
         {
             cout << "\tEnter Product ID to update: ";
             productID_to_update = validateNum.getValidInput();
             searchOption = true;
+            break;
         }
-        else if (searchChoice == 2)
+        case 2:
         {
             cout << "\tEnter Product Name to update: ";
             cin >> productName_to_update;
             searchOption = false;
+            break;
         }
-        else
+        case 0:
         {
-            cout << "\tInvalid choice!" << endl;
             return;
         }
+        default:
+            cout << "\tInvalid option" << endl;
+        }
+        // if (searchChoice == 1)
+        // {
+        //     cout << "\tEnter Product ID to update: ";
+        //     productID_to_update = validateNum.getValidInput();
+        //     // searchOption = true;
+        // }
+        // else if (searchChoice == 2)
+        // {
+        //     cout << "\tEnter Product Name to update: ";
+        //     cin >> productName_to_update;
+        //     searchOption = false;
+        // }
+        // else
+        // {
+        //     cout << "\tInvalid choice!" << endl;
+        //     return;
+        // }
         int index_to_update = -1; // The index of the product in the array (initially set to -1 because to make sure there is index number at the start)
         // Check if a product with the specified ID or name was found
         for (int i = 0; i < products.size(); i++)
@@ -172,7 +209,7 @@ public:
         if (index_to_update != -1)
         {
             // ask the user what they want to update
-            cout << "\tWhat do you want to update?\n"
+            cout << "\n\tWhat do you want to update?\n"
                  << endl;
             cout << "\t1. Product ID" << endl;
             cout << "\t2. Product name" << endl;
@@ -180,6 +217,7 @@ public:
             cout << "\t4. Product stock" << endl;
             cout << "\t0. Exit\n"
                  << endl;
+            cout << "\n\tPlease enter option to update: ";
             int option;
             option = validateNum.getValidInput();
 
@@ -190,7 +228,7 @@ public:
                 cout << "\tEnter new product ID: ";
                 newProductID = validateNum.getValidInput();
                 products[index_to_update]->setProductID(newProductID); // Use -> for pointer dereferencing
-                cout << "\tProduct updated." << endl;
+                cout << "\t\nProduct updated!" << endl;
                 break;
             case 2:
             {
@@ -230,10 +268,11 @@ public:
         }
     }
 
-    void DeleteProduct(vector<Product *> &products, string &key, bool searchByID)
+    void DeleteProduct(vector<Product *> &products)
     {
+        bool searchByID;
+        string key;
         int indexToDelete = -1;
-
         try
         {
             // Attempt to convert the key to an integer
@@ -279,10 +318,12 @@ public:
     void sortProduct(vector<Product *> &products)
     {
         int choice = -1;
-        cout << "\t\nPlease select option for sorting:\n"
+        cout << "\t\nProduct sorting:\n"
              << "\t1. Sort by ID\n"
              << "\t2. Sort by name\n"
              << "\t0. Exit\n";
+        cout << "\t\nPlease select option for sorting: "
+             << "\n";
         choice = validateNum.getValidInput();
 
         if (choice != 0)
@@ -291,30 +332,46 @@ public:
                  << "\t1. Sort by Ascending\n"
                  << "\t2. Sort by Descending\n"
                  << "\t0. Exit\n";
-            choice = validateNum.getValidInput();
+            int sortOption = validateNum.getValidInput();
 
-            if (choice != 0)
+            if (sortOption != 0)
             {
                 switch (choice)
                 {
                 case 1:
-                    sort(products.begin(), products.end(), compareByID);
+                    sortAndDisplay(products, compareByID, "ID", sortOption);
                     break;
                 case 2:
-                    sort(products.begin(), products.end(), compareByName);
-                    reverse(products.begin(), products.end());
+                    sortAndDisplay(products, compareByName, "Name", sortOption);
                     break;
                 default:
                     break;
                 }
-
-                cout << "\t\nSorted products\n";
-                products[0]->GetDisplayHeader();
-                for (auto product : products)
-                {
-                    product->GetDisplay();
-                }
             }
+        }
+    }
+
+    template <typename CompareFunction>
+    void sortAndDisplay(vector<Product *> &products, CompareFunction compare, const string &sortType, int sortOption)
+    {
+        sort(products.begin(), products.end(), compare);
+
+        if (sortOption == 2)
+        {
+            reverse(products.begin(), products.end());
+        }
+
+        cout << "\t\nProduct sorted by " << sortType << (sortOption == 1 ? " in Ascending" : " in Descending") << " order\n"
+             << endl;
+
+        cout << "\t\nSorted products\n";
+        if (!products.empty())
+        {
+            products[0]->GetDisplayHeader();
+        }
+        for (auto product : products)
+        {
+            product->GetDisplay();
         }
     }
 };

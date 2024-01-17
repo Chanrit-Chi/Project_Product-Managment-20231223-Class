@@ -58,7 +58,7 @@ public:
         {
             cin.clear();                                         // Clear the error state
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
-            cout << "Invalid input. Please enter a valid option: ";
+            cout << "\tInvalid input. Please enter a valid option: ";
         }
         return input;
     }

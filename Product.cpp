@@ -55,7 +55,7 @@ public:
         }
         else
         {
-            cout << "Invalid id" << endl;
+            cout << "\tInvalid id" << endl;
         }
     }
     int getProductID() const
@@ -70,7 +70,7 @@ public:
         }
         else
         {
-            cout << "Product name can not be emptied" << endl;
+            cout << "\tProduct name can not be emptied" << endl;
         }
     }
     string getProductName() const
@@ -85,7 +85,7 @@ public:
         }
         else
         {
-            cout << "Invalid price!" << endl;
+            cout << "\tInvalid price!" << endl;
         }
     }
     double getPrice() const
@@ -100,7 +100,7 @@ public:
         }
         else
         {
-            cout << "Invalid stock!" << endl;
+            cout << "\tInvalid stock number!" << endl;
         }
     }
     int getStock() const
