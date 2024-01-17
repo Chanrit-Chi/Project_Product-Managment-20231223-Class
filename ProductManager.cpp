@@ -35,22 +35,13 @@ public:
                  << endl;
             cout << "Do you want to add more product?(y/n): " << endl;
             cin >> add_more;
+            if (tolower(add_more) == 'n')
+            {
+                return;
+            }
 
-        } while (tolower(add_more) != 'n');
+        } while (true);
     }
-    void AddProductMENU(vector<Product *> &products)
-    {
-        char add_more;
-        do
-        {
-            cout << "Selected option: Add product \n\n";
-            // call the AddProduct function to ask for the product information and add it to the array
-            AddProduct(products);
-            cout << "Do you want to add more product?(y/n): " << endl;
-            cin >> add_more;
-        } while (tolower(add_more) != 'n');
-    }
-    // Destructor
     void Delete_Product(vector<Product *> &products)
     {
         // Delete each product in the vector
@@ -68,12 +59,12 @@ public:
     }
 
     // Function overloading to seach product by ID and name
-    int searchProduct(const Product products[], int count, int id)
+    int searchProduct(const vector<Product *> &products, int id)
     {
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < products.size(); i++)
         {
-            if (products[i].getProductID() == id)
+            if (products[i]->getProductID() == id)
             {
                 return i;
             }
@@ -81,13 +72,13 @@ public:
         return -1;
     }
     // Search product by name
-    int searchProduct(const Product products[], int count, string &name)
+    int searchProduct(const vector<Product *> &products, string &name)
     {
         string lowerName = name;
         // transform(name.begin(), name.end(), name.begin(), tolower);
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < products.size(); i++)
         {
-            string productName = products[i].getProductName();
+            string productName = products[i]->getProductName();
             // transform(productName.begin(), productName.end(), productName.begin(), tolower);
             if (productName == lowerName)
             {
@@ -97,7 +88,7 @@ public:
         return -1;
     }
 
-    int searchProductMenu(const Product products[], int count)
+    int searchProductMenu(const vector<Product *> &products)
     {
         string UserInput;
         cout << "Please enter ID or name to seach: ";
@@ -105,11 +96,11 @@ public:
         try
         {
             int id = stoi(UserInput);
-            int index = searchProduct(products, count, id);
+            int index = searchProduct(products, id);
             if (index != -1)
             {
-                products[index].GetDisplayHeader();
-                products[index].GetDisplay();
+                products[index]->GetDisplayHeader();
+                products[index]->GetDisplay();
             }
             else
             {
@@ -118,11 +109,11 @@ public:
         }
         catch (const invalid_argument &)
         {
-            int index = searchProduct(products, count, UserInput);
+            int index = searchProduct(products, UserInput);
             if (index != -1)
             {
-                products[index].GetDisplayHeader();
-                products[index].GetDisplay();
+                products[index]->GetDisplayHeader();
+                products[index]->GetDisplay();
             }
             else
             {
@@ -140,29 +131,54 @@ public:
     {
         int productID_to_update;
         string productName_to_update;
-        bool searchByID;
-        int index_to_update = -1; // The index of the product in the array (initially set to -1 because to make sure there is index number at the start)
+        bool searchOption;
         int newProductID;
+
+        cout << "\tDo you want to update the product by: \n"
+             << "\t1. Product ID\n"
+             << "\t2. Product name\n"
+             << endl;
+        cout << "\tEnter your choice: ";
+        int searchChoice = validateNum.getValidInput();
+        if (searchChoice == 1)
+        {
+            cout << "\tEnter Product ID to update: ";
+            productID_to_update = validateNum.getValidInput();
+            searchOption = true;
+        }
+        else if (searchChoice == 2)
+        {
+            cout << "\tEnter Product Name to update: ";
+            cin >> productName_to_update;
+            searchOption = false;
+        }
+        else
+        {
+            cout << "\tInvalid choice!" << endl;
+            return;
+        }
+        int index_to_update = -1; // The index of the product in the array (initially set to -1 because to make sure there is index number at the start)
+        // Check if a product with the specified ID or name was found
         for (int i = 0; i < products.size(); i++)
         {
             Product *product = products[i];
-            if ((searchByID && product->getProductID() == productID_to_update) || (!searchByID && product->getProductName() == productName_to_update))
+            if ((searchOption && product->getProductID() == productID_to_update) || (!searchOption && product->getProductName() == productName_to_update))
             {
                 index_to_update = i;
                 break;
             }
         }
-        // Check if a product with the specified ID or name was found
+
         if (index_to_update != -1)
         {
             // ask the user what they want to update
-            cout << "What do you want to update?\n"
+            cout << "\tWhat do you want to update?\n"
                  << endl;
-            cout << "1. Product ID" << endl;
-            cout << "2. Product name" << endl;
-            cout << "3. Product price" << endl;
-            cout << "4. Product stock" << endl;
-            cout << "0. Exit\n"
+            cout << "\t1. Product ID" << endl;
+            cout << "\t2. Product name" << endl;
+            cout << "\t3. Product price" << endl;
+            cout << "\t4. Product stock" << endl;
+            cout << "\t0. Exit\n"
                  << endl;
             int option;
             option = validateNum.getValidInput();
@@ -171,46 +187,50 @@ public:
             switch (option)
             {
             case 1:
-                cout << "Enter new product ID: ";
+                cout << "\tEnter new product ID: ";
                 newProductID = validateNum.getValidInput();
                 products[index_to_update]->setProductID(newProductID); // Use -> for pointer dereferencing
+                cout << "\tProduct updated." << endl;
                 break;
             case 2:
             {
                 string ProdName;
-                cout << "Enter new product name: ";
+                cout << "\tEnter new product name: ";
                 cin >> ProdName;
                 products[index_to_update]->setProductName(ProdName); // Use -> for pointer dereferencing
+                cout << "\tProduct updated." << endl;
                 break;
             }
             case 3:
             {
                 double price;
-                cout << "Enter new product price: ";
+                cout << "\tEnter new product price: ";
                 cin >> price;
                 products[index_to_update]->setPrice(price); // Use -> for pointer dereferencing
+                cout << "\tProduct updated." << endl;
                 break;
             }
             case 4:
             {
-                cout << "Enter new product stock: ";
+                cout << "\tEnter new product stock: ";
                 int newStock = validateNum.getValidInput();
                 products[index_to_update]->setStock(newStock); // Use -> for pointer dereferencing
+                cout << "\tProduct updated." << endl;
                 break;
             }
             case 0:
                 break;
             default:
-                cout << "Invalid option!" << endl;
+                cout << "\tInvalid option!" << endl;
             }
         }
         else
         {
-            cout << "Product not found!" << endl;
+            cout << "\tProduct not found!" << endl;
         }
     }
 
-    void DeleteProduct(Product products[], int &count, string &key, bool searchByID)
+    void DeleteProduct(vector<Product *> &products, string &key, bool searchByID)
     {
         int indexToDelete = -1;
 
@@ -222,25 +242,26 @@ public:
             // Call the appropriate search function based on searchByID
             if (searchByID)
             {
-                indexToDelete = searchProduct(products, count, id);
+                indexToDelete = searchProduct(products, id);
             }
         }
         catch (invalid_argument &) // Key is not a number
         {
             // Searching by name
-            indexToDelete = searchProduct(products, count, key);
+            indexToDelete = searchProduct(products, key);
         }
 
         if (indexToDelete != -1)
         {
             // Product found, delete it
-            products[indexToDelete] = products[count - 1];
-            count--;
-            cout << "Product deleted successfully." << endl;
+            delete products[indexToDelete];
+            products[indexToDelete] = products.back();
+            products.pop_back();
+            cout << "\tProduct deleted successfully." << endl;
         }
         else
         {
-            cout << "Product not found." << endl;
+            cout << "\tProduct not found." << endl;
         }
     }
 
@@ -258,18 +279,18 @@ public:
     void sortProduct(vector<Product *> &products)
     {
         int choice = -1;
-        cout << "\nPlease select option for sorting:\n"
-             << "1. Sort by ID\n"
-             << "2. Sort by name\n"
-             << "0. Exit\n";
+        cout << "\t\nPlease select option for sorting:\n"
+             << "\t1. Sort by ID\n"
+             << "\t2. Sort by name\n"
+             << "\t0. Exit\n";
         choice = validateNum.getValidInput();
 
         if (choice != 0)
         {
-            cout << "\nPlease select the sorting order:\n"
-                 << "1. Sort by Ascending\n"
-                 << "2. Sort by Descending\n"
-                 << "0. Exit\n";
+            cout << "\t\nPlease select the sorting order:\n"
+                 << "\t1. Sort by Ascending\n"
+                 << "\t2. Sort by Descending\n"
+                 << "\t0. Exit\n";
             choice = validateNum.getValidInput();
 
             if (choice != 0)
@@ -287,7 +308,7 @@ public:
                     break;
                 }
 
-                cout << "\nSorted products\n";
+                cout << "\t\nSorted products\n";
                 products[0]->GetDisplayHeader();
                 for (auto product : products)
                 {
