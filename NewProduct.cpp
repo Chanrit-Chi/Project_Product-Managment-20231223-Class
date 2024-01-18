@@ -9,4 +9,6 @@ class NewProduct : public Product
 private:
     string ManufacturingDate;
     int WarrantyPeriod;
+
+public:
 };
