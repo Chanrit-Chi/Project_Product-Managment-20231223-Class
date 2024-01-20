@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include "Product.cpp"
@@ -8,11 +9,10 @@ using namespace std;
 class NewProduct : public Product
 {
 private:
-    string ManufacturingDate;
     int WarrantyPeriod;
+    Validator validator;
 
 public:
-    Validator validator;
     NewProduct()
     {
         this->WarrantyPeriod = 0;
@@ -25,7 +25,7 @@ public:
 
     ~NewProduct(){};
 
-    void SetWarrantyPeriod(const string &ManufacturingDate)
+    void SetWarrantyPeriod(int WarrantyPeriod)
     {
         if (validator.isValidWarrantyPeriod(WarrantyPeriod))
         {

@@ -8,10 +8,11 @@
 #include "Validator.cpp"
 #include "UsedProduct.cpp"
 #include "NewProduct.cpp"
+#include "ProductDAO.cpp"
 
 using namespace std;
 
-class ProductManager
+class ProductManager : public ProductDAO
 {
 private:
     string ProductName;
@@ -20,7 +21,7 @@ private:
     Validator validateNum;
 
 public:
-    void AddProduct(vector<Product *> &products)
+    void AddProduct(vector<Product *> &products) override
     {
         char add_more;
         do
@@ -39,18 +40,50 @@ public:
             Product *newProduct = nullptr;
             if (tolower(productType == 'n'))
             {
-                newProduct = new NewProduct();
-
-                cout << "\tEnter warranty period: ";
+                cout << "\tEnter warranty period (month): ";
                 int warrantyPeriod;
-                cin >> warrantyPeriod;
+                warrantyPeriod = validateNum.getValidInput();
+                newProduct = new NewProduct();
 
                 dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(warrantyPeriod);
             }
+            else if (tolower(add_more) == 'u')
+            {
+                cout << "\t\tEnter condition (g/b for Good/Bad): ";
+                char ConditionType;
+                while (true)
+                {
+                    cin >> ConditionType;
+                    ConditionType = tolower(ConditionType);
+                    if (ConditionType == 'g' || ConditionType == 'b')
+                    {
+                        break;
+                    }
+                    cout << "\tInvalid input, please try again." << endl;
+                }
+                Condition condition;
+                switch (ConditionType)
+                {
+                case 'g':
+                    condition == Condition::Good;
+                    break;
+                case 'b':
+                    condition == Condition::Bad;
+                    break;
+                default:
+                    cout << "\tInvalid condition input. Using default (Good)." << endl;
+                    break;
+                }
+                newProduct = new UsedProduct(condition);
+            }
+            if (newProduct != nullptr)
+            {
+                products.push_back(newProduct);
 
-            products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
-            cout << "\n\tProduct added!\n"
-                 << endl;
+                cout << "\n\tProduct added!\n"
+                     << endl;
+            }
+
             cout << "\tDo you want to add more product?(y/n): ";
             cin >> add_more;
             if (tolower(add_more) == 'n')

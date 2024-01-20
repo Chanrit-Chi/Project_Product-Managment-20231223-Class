@@ -44,7 +44,7 @@ public:
         this->stock_in = prod.stock_in;
     }
     // destructor: best practice to use destructor
-    ~Product(){};
+    virtual ~Product(){};
 
     // setter and getter
     void setProductID(const int &productID)

@@ -1,21 +1,17 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include "Product.cpp"
 #include "Validator.cpp"
+#include "ConditionEnum.h"
 
 using namespace std;
 
-enum class Condition
-{
-    Good,
-    SlightlyGood,
-    Bad
-};
 class UsedProduct : public Product
 {
 private:
     Condition condition;
-    Validator validator;
+    Validator validateEnum;
 
 public:
     UsedProduct() : condition(Condition::Good) {}
@@ -26,7 +22,7 @@ public:
 
     void setCondition(Condition NewCondition)
     {
-        if (validator.isValidCondition(NewCondition))
+        if (validateEnum.isValidCondition(NewCondition))
         {
             condition = NewCondition;
         }
@@ -35,6 +31,7 @@ public:
             cout << "\tInvalid input condition" << endl;
         }
     }
+
     Condition getCondition() const
     {
         return condition;
