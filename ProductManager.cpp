@@ -6,6 +6,8 @@
 #include <algorithm>
 #include "Product.cpp"
 #include "Validator.cpp"
+#include "UsedProduct.cpp"
+#include "NewProduct.cpp"
 
 using namespace std;
 
@@ -30,6 +32,22 @@ public:
             cin >> Price;
             cout << "\tEnter product stock: ";
             cin >> StockIN;
+
+            cout << "\tIs the product new or used? (n/u): ";
+            char productType;
+            cin >> productType;
+            Product *newProduct = nullptr;
+            if (tolower(productType == 'n'))
+            {
+                newProduct = new NewProduct();
+
+                cout << "\tEnter warranty period: ";
+                int warrantyPeriod;
+                cin >> warrantyPeriod;
+
+                dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(warrantyPeriod);
+            }
+
             products.push_back(new Product(NextProductID, ProductName, Price, StockIN));
             cout << "\n\tProduct added!\n"
                  << endl;

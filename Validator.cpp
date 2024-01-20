@@ -1,9 +1,10 @@
 #pragma once
 #include <regex>
-// #include "Product.cpp"
 #include <string>
+#include "UsedProduct.cpp"
 using namespace std;
 
+enum class Condition;
 class Validator
 
 {
@@ -49,9 +50,17 @@ public:
     {
         return getStock >= 0;
     }
-
+    static bool isValidWarrantyPeriod(const int &getWarrantyPeriod)
+    {
+        return getWarrantyPeriod >= 0;
+    }
+    static bool isValidCondition(Condition condition)
+    {
+        return condition >= Condition::Good && condition <= Condition::Bad;
+    }
     // Validate Input numeric data
-    int getValidInput()
+    int
+    getValidInput()
     { // This is to put constrain on number input
         int input;
         while (!(cin >> input))
