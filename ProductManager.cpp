@@ -47,9 +47,9 @@ public:
 
                 dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(warrantyPeriod);
             }
-            else if (tolower(add_more) == 'u')
+            else if (tolower(productType) == 'u')
             {
-                cout << "\t\tEnter condition (g/b for Good/Bad): ";
+                cout << "\tEnter condition (g/b for Good/Bad): ";
                 char ConditionType;
                 while (true)
                 {
@@ -105,16 +105,16 @@ public:
 
     void ViewProduct(const vector<Product *> &products) const
     {
-        if (!products.empty())
-        {
-            cout << "\t\nView all products\n"
-                 << endl;
-            products[0]->GetDisplayHeader();
-        }
-        else
+        if (products.empty())
         {
             cout << "Product is empty. Please add some products." << endl;
+            return;
         }
+
+        cout << "\nView all products\n"
+             << endl;
+        products[0]->GetDisplayHeader();
+
         for (const Product *product : products)
         {
             product->GetDisplay();
