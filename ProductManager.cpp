@@ -93,7 +93,7 @@ public:
 
         } while (true);
     }
-    void Delete_Product(vector<Product *> &products)
+    void DeleteProductForVector(vector<Product *> &products)
     {
         // Delete each product in the vector
         for (Product *product : products)
