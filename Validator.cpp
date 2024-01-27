@@ -76,4 +76,34 @@ public:
         }
         return input;
     }
+
+    // Validate input Enumeration
+    bool isValidType(char newTypeChar)
+    {
+        while (true)
+        {
+
+            Type type;
+            if (cin >> newTypeChar)
+            {
+                switch (tolower(newTypeChar))
+                {
+                case 'n':
+                    type = Type::New;
+                    return true;
+                case 'u':
+                    type = Type::Used;
+                    return true;
+                default:
+                    cout << "\tInvalid product type! Please try again." << endl;
+                }
+            }
+            else
+            {
+                cout << "\tInvalid input! Please enter a single character (n/N or u/U)." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }
+    }
 };
