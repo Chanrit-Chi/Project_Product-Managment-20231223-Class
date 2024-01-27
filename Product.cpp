@@ -128,32 +128,45 @@ public:
         return type;
     }
 
-    void GetDisplay() const override
+    // virtual void GetDisplay() const
+    // {
+    //     cout << setw(5) << getProductID() << setw(20)
+    //          << getProductName() << setw(10) << '$' << fixed
+    //          << setprecision(2) << getPrice() << setw(15) << getStock(),
+    //         getType();
+    // }
+    // virtual void GetDisplayHeader() const
+    // {
+    //     cout << setw(5) << "ID" << setw(20) << "Name" << setw(10) << "Price" << setw(15) << "Stock" << setw(15) << "Product Type"
+    //          << "Details\n";
+    //     cout << setfill('-') << setw(65) << "" << setfill(' ');
+    // }
+    virtual void GetDisplay() const
     {
-        cout << left << setw(5) << getProductID() << setw(20)
-             << getProductName() << '$' << fixed << setw(10)
-             << setprecision(2) << getPrice() << setw(15) << getStock();
+        cout << left << setw(5) << getProductID()
+             << setw(20) << getProductName()
+             << "$" << fixed << setprecision(2) << setw(14) << getPrice()
+             << setw(15) << getStock();
 
-        // Additional details based on product type
         if (getType() == Type::New)
         {
-            cout << setw(15) << "New Product - ";
-            cout << "Warranty: " << dynamic_cast<const NewProduct *>(this)->getWarrantyPeriod() << " months";
+            cout << setw(15) << "New";
         }
         else if (getType() == Type::Used)
         {
-            cout << setw(15) << "Used Product - ";
-            cout << "Condition: ";
-            if (dynamic_cast<const UsedProduct *>(this)->getCondition() == Condition::Good)
-            {
-                cout << "Good";
-            }
-            else
-            {
-                cout << "Bad";
-            }
+            cout << setw(15) << "Used";
         }
+    }
 
-        cout << endl;
+    void GetDisplayHeader() const
+    {
+        cout << left << setw(5) << "ID"
+             << setw(20) << "Name"
+             << setw(15) << "Price"
+             << setw(15) << "Stock"
+             << setw(15) << "Product Type" << setw(25)
+             << "Details"
+             << "\n"
+             << endl;
     }
 };

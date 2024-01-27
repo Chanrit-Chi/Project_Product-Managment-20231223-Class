@@ -109,7 +109,7 @@ public:
     {
         if (products.empty())
         {
-            cout << "Product is empty. Please add some products." << endl;
+            cout << "\tProduct is empty. Please add some products." << endl;
             return;
         }
 
@@ -119,15 +119,7 @@ public:
 
         for (const Product *product : products)
         {
-            if (product->getType() == Type::New)
-            {
-                cout << setw(15) << "New Product - ";
-            }
-            else if (product->getType() == Type::Used)
-            {
-                cout << setw(15) << "Used Product - ";
-            }
-            product->GetDisplay(); // Display the product details only once
+            product->GetDisplay();
         }
     }
 

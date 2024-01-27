@@ -16,7 +16,7 @@ private:
 public:
     NewProduct() : WarrantyPeriod(0) {}
 
-    NewProduct(int ProductID, string &ProductName, double Price, int Stock_in, Type type, int WarrantyPeriod) : Product(ProductID, ProductName, Price, Stock_in, type), WarrantyPeriod(WarrantyPeriod)
+    NewProduct(int ProductID, string &ProductName, double Price, int Stock_in, Type type, int WarrantyPeriod) : Product(ProductID, ProductName, Price, Stock_in, Type::New), WarrantyPeriod(WarrantyPeriod)
     {
     }
 
@@ -42,6 +42,6 @@ public:
     void GetDisplay() const override
     {
         Product::GetDisplay();
-        cout << ", The warranty period: " << WarrantyPeriod << " months\n";
+        cout << "Warranty period: " << WarrantyPeriod << " months\n";
     }
 };

@@ -14,10 +14,8 @@ private:
     Validator validateEnum;
 
 public:
-    UsedProduct() : condition(Condition::Good) {}
-
     UsedProduct(int productID, string ProductName, double price, int stock_in, Type type, Condition initialCondition)
-        : Product(productID, ProductName, price, stock_in, type), condition(initialCondition)
+        : Product(productID, ProductName, price, stock_in, Type::Used), condition(initialCondition)
     {
     }
 
@@ -38,5 +36,11 @@ public:
     Condition getCondition() const
     {
         return condition;
+    }
+
+    void GetDisplay() const override
+    {
+        Product::GetDisplay();
+        cout << "Condition: " << (condition == Condition::Good ? "Good" : "Bad") << endl;
     }
 };
