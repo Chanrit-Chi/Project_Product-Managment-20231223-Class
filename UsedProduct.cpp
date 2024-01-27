@@ -16,7 +16,10 @@ private:
 public:
     UsedProduct() : condition(Condition::Good) {}
 
-    UsedProduct(Condition initialCondition) : condition(initialCondition) {}
+    UsedProduct(int productID, string ProductName, double price, int stock_in, Type type, Condition initialCondition)
+        : Product(productID, ProductName, price, stock_in, type), condition(initialCondition)
+    {
+    }
 
     ~UsedProduct(){};
 

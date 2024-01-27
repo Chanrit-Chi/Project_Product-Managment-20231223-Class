@@ -8,7 +8,7 @@
 #include "Validator.cpp"
 #include "UsedProduct.cpp"
 #include "NewProduct.cpp"
-#include "ProductDAO.cpp"
+#include "ConditionEnum.h"
 
 using namespace std;
 
@@ -19,6 +19,7 @@ private:
     double Price;
     int StockIN;
     Validator validateNum;
+    Type type;
 
 public:
     void AddProduct(vector<Product *> &products) override
@@ -43,7 +44,7 @@ public:
                 cout << "\tEnter warranty period (month): ";
                 int warrantyPeriod;
                 warrantyPeriod = validateNum.getValidInput();
-                newProduct = new NewProduct();
+                newProduct = new NewProduct(NextProductID, ProductName, Price, StockIN, Type::New, warrantyPeriod);
 
                 dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(warrantyPeriod);
             }
@@ -65,16 +66,17 @@ public:
                 switch (ConditionType)
                 {
                 case 'g':
-                    condition == Condition::Good;
+                    condition = Condition::Good;
                     break;
                 case 'b':
-                    condition == Condition::Bad;
+                    condition = Condition::Bad;
                     break;
                 default:
                     cout << "\tInvalid condition input. Using default (Good)." << endl;
+                    condition = Condition::Good;
                     break;
                 }
-                newProduct = new UsedProduct(condition);
+                newProduct = new UsedProduct(NextProductID, ProductName, Price, StockIN, Type::Used, condition);
             }
             if (newProduct != nullptr)
             {
@@ -93,7 +95,7 @@ public:
 
         } while (true);
     }
-    void Delete_Product(vector<Product *> &products)
+    void DeleteProductForVector(vector<Product *> &products)
     {
         // Delete each product in the vector
         for (Product *product : products)
@@ -103,7 +105,7 @@ public:
         products.clear();
     }
 
-    void ViewProduct(const vector<Product *> &products) const
+    void ViewProduct(const vector<Product *> &products) const override
     {
         if (products.empty())
         {
@@ -117,7 +119,15 @@ public:
 
         for (const Product *product : products)
         {
-            product->GetDisplay();
+            if (product->getType() == Type::New)
+            {
+                cout << setw(15) << "New Product - ";
+            }
+            else if (product->getType() == Type::Used)
+            {
+                cout << setw(15) << "Used Product - ";
+            }
+            product->GetDisplay(); // Display the product details only once
         }
     }
 
@@ -151,7 +161,7 @@ public:
         return -1;
     }
 
-    int searchProductMenu(const vector<Product *> &products)
+    int searchProductMenu(const vector<Product *> &products) override
     {
         string UserInput;
         cout << "\tPlease enter ID or name to seach: ";
@@ -190,7 +200,7 @@ public:
         }
     }
 
-    void update_product(vector<Product *> &products)
+    void update_product(vector<Product *> &products) override
     {
         int productID_to_update;
         string productName_to_update;
@@ -302,7 +312,7 @@ public:
         }
     }
 
-    void DeleteProduct(vector<Product *> &products)
+    void DeleteProduct(vector<Product *> &products) override
     {
         bool search;
         string key;
@@ -345,7 +355,7 @@ public:
         return a->getProductName() < b->getProductName();
     }
 
-    void sortProduct(vector<Product *> &products)
+    void sortProduct(vector<Product *> &products) override
     {
         int choice = -1;
         cout << "\tProduct sorting:\n"

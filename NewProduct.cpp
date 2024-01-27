@@ -3,6 +3,7 @@
 #include <string>
 #include "Product.cpp"
 #include "Validator.cpp"
+#include "ProductDAO.cpp"
 
 using namespace std;
 
@@ -13,14 +14,10 @@ private:
     Validator validator;
 
 public:
-    NewProduct()
-    {
-        this->WarrantyPeriod = 0;
-    }
+    NewProduct() : WarrantyPeriod(0) {}
 
-    NewProduct(int WarrantyPeriod)
+    NewProduct(int ProductID, string &ProductName, double Price, int Stock_in, Type type, int WarrantyPeriod) : Product(ProductID, ProductName, Price, Stock_in, type), WarrantyPeriod(WarrantyPeriod)
     {
-        this->WarrantyPeriod = WarrantyPeriod;
     }
 
     ~NewProduct(){};
@@ -40,5 +37,11 @@ public:
     int getWarrantyPeriod() const
     {
         return WarrantyPeriod;
+    }
+
+    void GetDisplay() const override
+    {
+        Product::GetDisplay();
+        cout << ", The warranty period: " << WarrantyPeriod << " months\n";
     }
 };

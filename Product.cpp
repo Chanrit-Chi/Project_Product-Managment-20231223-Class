@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include "ConditionEnum.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ private:
     string ProductName;
     double price;
     int stock_in;
+    Type type;
 
 public:
     Validator validator;
@@ -27,12 +29,13 @@ public:
     }
 
     // parameterize constructor
-    Product(int productID, string ProductName, double price, int stock_in)
+    Product(int productID, string ProductName, double price, int stock_in, Type type)
     {
         this->productID = productID;
         this->ProductName = ProductName;
         this->price = price;
         this->stock_in = stock_in;
+        this->type = type;
     }
     // copy constructor
 
@@ -42,6 +45,7 @@ public:
         this->ProductName = prod.ProductName;
         this->price = prod.price;
         this->stock_in = prod.stock_in;
+        this->type = prod.type;
     }
     // destructor: best practice to use destructor
     virtual ~Product(){};
@@ -107,16 +111,49 @@ public:
     {
         return stock_in;
     }
-
-    void GetDisplay() const
+    void setType(char type)
     {
-        cout << left << setw(15) << getProductID() << left << setw(20)
-             << getProductName() << '$' << fixed << left << setw(15)
-             << setprecision(2) << getPrice() << left << setw(15) << getStock() << endl;
+        if (validator.isValidType(static_cast<char>(type)))
+        {
+            Type validateType = static_cast<Type>(type);
+            this->type = validateType;
+        }
+        else
+        {
+            cout << "\tInvalid type of product" << endl;
+        }
     }
-    void GetDisplayHeader() const
+    Type getType() const
     {
-        cout << left << setw(15) << "Product ID" << left << setw(20) << "Name" << left << setw(15) << "Price"
-             << left << setw(15) << "Stock" << endl;
+        return type;
+    }
+
+    void GetDisplay() const override
+    {
+        cout << left << setw(5) << getProductID() << setw(20)
+             << getProductName() << '$' << fixed << setw(10)
+             << setprecision(2) << getPrice() << setw(15) << getStock();
+
+        // Additional details based on product type
+        if (getType() == Type::New)
+        {
+            cout << setw(15) << "New Product - ";
+            cout << "Warranty: " << dynamic_cast<const NewProduct *>(this)->getWarrantyPeriod() << " months";
+        }
+        else if (getType() == Type::Used)
+        {
+            cout << setw(15) << "Used Product - ";
+            cout << "Condition: ";
+            if (dynamic_cast<const UsedProduct *>(this)->getCondition() == Condition::Good)
+            {
+                cout << "Good";
+            }
+            else
+            {
+                cout << "Bad";
+            }
+        }
+
+        cout << endl;
     }
 };
