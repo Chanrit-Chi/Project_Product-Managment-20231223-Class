@@ -1,5 +1,5 @@
-// This implement only for the input field
-// ID, name, ......
+// User.cpp
+
 #pragma once
 #include <iostream>
 #include <iomanip>
@@ -14,37 +14,25 @@ private:
     string password;
     string address;
     string phone;
+    Validator validator;
 
 public:
-    Validator validator;
-    User() // Default constructor
-    {
-        this->name = "Unknow";
-        this->password = "***";
-        this->address = "Unknown";
-        this->phone = "###########";
-    }
-    // Parameterize constructor
+    // Default constructor
+    User()
+        : name("Unknown"), password("***"), address("Unknown"), phone("###########") {}
 
-    User(string name, string password, string address, string phone)
-    {
-        this->name = name;
-        this->password = password;
-        this->address = address;
-        this->phone = phone;
-    }
+    // Parameterized constructor
+    User(const string &name, const string &password, const string &address, const string &phone)
+        : name(name), password(password), address(address), phone(phone) {}
 
-    // copy constructor
+    // Copy constructor
     User(const User &user)
-    {
-        this->name = user.name;
-        this->password = user.password;
-        this->address = user.address;
-        this->phone = user.phone;
-    }
+        : name(user.name), password(user.password), address(user.address), phone(user.phone) {}
 
-    ~User(){};
+    // Destructor
+    ~User() {}
 
+    // Getter and setter methods
     void setName(const string &name)
     {
         if (validator.isValidName(name))
@@ -53,13 +41,15 @@ public:
         }
         else
         {
-            cout << "Name can not be emptied. Please enter a name." << endl;
+            cout << "Name cannot be empty. Please enter a name." << endl;
         }
     }
+
     string getName() const
     {
         return name;
     }
+
     void setPassword(const string &password)
     {
         if (validator.isValidPassword(password))
@@ -68,14 +58,16 @@ public:
         }
         else
         {
-            cout << "Password must be at least 5 or more length" << endl;
+            cout << "Password must be at least 5 characters long." << endl;
         }
     }
+
     string getPassword() const
     {
         return password;
     }
-    void setAddress(const string address)
+
+    void setAddress(const string &address)
     {
         if (validator.isValidAddress(address))
         {
@@ -83,14 +75,16 @@ public:
         }
         else
         {
-            cout << "Address can not be empties, please enter an address" << endl;
+            cout << "Address cannot be empty. Please enter an address." << endl;
         }
     }
+
     string getAddress() const
     {
         return address;
     }
-    void setPhone(const string phone)
+
+    void setPhone(const string &phone)
     {
         if (validator.isValidPhone(phone))
         {
@@ -107,7 +101,11 @@ public:
         return phone;
     }
 
-    void acc_login()
+    void displayUserInfo() const
     {
+        cout << "Name: " << setw(20) << name
+             << "Password: " << setw(20) << password
+             << "Address: " << setw(20) << address
+             << "Phone: " << setw(20) << phone << endl;
     }
 };

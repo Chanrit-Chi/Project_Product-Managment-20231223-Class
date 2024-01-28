@@ -4,7 +4,7 @@
 #include "Product.cpp"
 #include "ProductManager.cpp"
 #include "User.cpp"
-#include "UserManager.cpp"
+#include "AccountManager.cpp"
 #include "Validator.cpp"
 
 using namespace std;
@@ -14,12 +14,13 @@ class Application
 private:
     vector<Product *> Products;
     ProductManager ProdManager;
+    AccountManager accountManager;
     Validator ValidInput;
 
 public:
     void run()
     {
-
+        ProdManager.LoadProduct(Products);
         int choice;
         do
         {
@@ -70,6 +71,7 @@ public:
             }
             case 0:
             {
+                ProdManager.SaveProduct(Products);
                 return;
             }
 

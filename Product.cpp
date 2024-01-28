@@ -127,19 +127,6 @@ public:
     {
         return type;
     }
-
-    // virtual void GetDisplay() const
-    // {
-    //     cout << setw(5) << getProductID() << setw(20)
-    //          << getProductName() << setw(10) << '$' << fixed
-    //          << setprecision(2) << getPrice() << setw(15) << getStock(),
-    //         getType();
-    // }
-    // virtual void GetDisplayHeader() const
-    // {
-    //     cout << setw(5) << "ID" << setw(20) << "Name" << setw(10) << "Price" << setw(15) << "Stock" << setw(15) << "Product Type"
-    //          << "Details\n";
-    //     cout << setfill('-') << setw(65) << "" << setfill(' ');
     // }
     virtual void GetDisplay() const
     {

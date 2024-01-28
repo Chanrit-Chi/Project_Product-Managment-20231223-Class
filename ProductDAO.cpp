@@ -10,4 +10,6 @@ public:
     virtual void update_product(vector<Product *> &products) = 0;
     virtual void DeleteProduct(vector<Product *> &products) = 0;
     virtual void sortProduct(vector<Product *> &products) = 0;
+    virtual void SaveProduct(const vector<Product *> &products) const = 0;
+    virtual void LoadProduct(vector<Product *> &products) = 0;
 };

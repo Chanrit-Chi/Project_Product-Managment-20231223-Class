@@ -9,7 +9,7 @@
 #include "UsedProduct.cpp"
 #include "NewProduct.cpp"
 #include "ConditionEnum.h"
-
+#include <fstream>
 using namespace std;
 
 class ProductManager : public ProductDAO
@@ -20,14 +20,23 @@ private:
     int StockIN;
     Validator validateNum;
     Type type;
+    vector<Product *> products;
+    const string productDataFilename = "ProductData.txt";
 
 public:
-    void AddProduct(vector<Product *> &products) override
+    void
+    AddProduct(vector<Product *> &products) override
     {
         char add_more;
         do
         {
-            int NextProductID = 1 + products.size();
+            int NextProductID = 1;
+            if (!products.empty())
+            {
+                auto maxProductID = max_element(products.begin(), products.end(), [](const Product *a, const Product *b)
+                                                { return a->getProductID() < b->getProductID(); });
+                NextProductID = (*maxProductID)->getProductID() + 1;
+            }
             cout << "\tEnter Product Name: ";
             cin >> ProductName;
             cout << "\tEnter product price: ";
@@ -324,11 +333,28 @@ public:
 
         if (indexToDelete != -1)
         {
-            // Product found, delete it
-            delete products[indexToDelete];
-            products[indexToDelete] = products.back();
-            products.pop_back();
-            cout << "\tProduct deleted successfully." << endl;
+            char choice;
+            do
+            {
+                cout << "\tAre you sure you want to delete? y/n: ";
+                cin >> choice;
+                if (tolower(choice) == 'y')
+                {
+                    delete products[indexToDelete];
+                    products[indexToDelete] = products.back();
+                    products.pop_back();
+                    cout << "\tProduct deleted successfully." << endl;
+                }
+                else if (tolower(choice) == 'n')
+                {
+                    cout << "\tDeletion cancelled!" << endl;
+                    return;
+                }
+                else
+                {
+                    cout << "\tInvalid choice." << endl;
+                }
+            } while (choice != 'n' || choice != 'y');
         }
         else
         {
@@ -403,5 +429,91 @@ public:
         {
             product->GetDisplay();
         }
+    }
+
+    void SaveProduct(const vector<Product *> &products) const override
+    {
+        ofstream outputFile("ProductData.txt");
+        if (!outputFile.is_open())
+        {
+            cout << "Error creating output file\n";
+            exit(1);
+        }
+
+        for (const auto &product : products)
+        {
+            // Save product details to the file
+            outputFile << product->getProductID() << ","
+                       << product->getProductName() << ","
+                       << product->getPrice() << ","
+                       << product->getStock() << ","
+                       << (product->getType() == Type::New ? "N" : "U"); // Save product type
+
+            // Additional details based on product type
+            if (product->getType() == Type::New)
+            {
+                outputFile << "," << dynamic_cast<const NewProduct *>(product)->getWarrantyPeriod();
+            }
+            else if (product->getType() == Type::Used)
+            {
+                outputFile << "," << static_cast<int>(dynamic_cast<const UsedProduct *>(product)->getCondition());
+            }
+
+            outputFile << "\n";
+        }
+
+        cout << "Data file saved successfully" << endl;
+        outputFile.close();
+    }
+
+    void LoadProduct(vector<Product *> &products) override
+    {
+        ifstream inputFile("ProductData.txt");
+        if (!inputFile.is_open())
+        {
+            // If the file doesn't exist, create an empty file
+            ofstream outputFile("ProductData.txt");
+            if (!outputFile.is_open())
+            {
+                cout << "Error creating output file\n";
+                exit(1);
+            }
+            outputFile.close();
+
+            cout << "No existing data found. Created an empty file.\n";
+            return;
+        }
+
+        products.clear();
+
+        int productID, stock;
+        double price;
+        string productName, type;
+        int additionalInfo;
+
+        while (inputFile >> productID >> productName >> price >> stock >> type)
+        {
+            Product *newProduct = nullptr;
+
+            if (type == "N")
+            {
+                inputFile >> additionalInfo;
+                newProduct = new NewProduct(productID, productName, price, stock, Type::New, additionalInfo);
+                dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(additionalInfo);
+            }
+            else if (type == "U")
+            {
+                inputFile >> additionalInfo;
+                newProduct = new UsedProduct(productID, productName, price, stock, Type::Used, static_cast<Condition>(additionalInfo));
+            }
+
+            if (newProduct != nullptr)
+            {
+                products.push_back(newProduct);
+            }
+        }
+
+        inputFile.close();
+        cout << "Data file loaded successfully" << endl;
     }
 };
