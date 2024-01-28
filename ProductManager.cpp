@@ -431,89 +431,174 @@ public:
         }
     }
 
-    void SaveProduct(const vector<Product *> &products) const override
+    // void SaveProduct(const vector<Product *> &products) const override
+    // {
+    //     ofstream outputFile("ProductData.txt");
+    //     if (!outputFile.is_open())
+    //     {
+    //         cout << "Error creating output file\n";
+    //         exit(1);
+    //     }
+
+    //     for (const auto &product : products)
+    //     {
+    //         // Save product details to the file
+    //         outputFile << product->getProductID() << ","
+    //                    << product->getProductName() << ","
+    //                    << product->getPrice() << ","
+    //                    << product->getStock() << ","
+    //                    << (product->getType() == Type::New ? "N" : "U"); // Save product type
+
+    //         // Additional details based on product type
+    //         if (product->getType() == Type::New)
+    //         {
+    //             outputFile << "," << dynamic_cast<const NewProduct *>(product)->getWarrantyPeriod();
+    //         }
+    //         else if (product->getType() == Type::Used)
+    //         {
+    //             outputFile << "," << static_cast<int>(dynamic_cast<const UsedProduct *>(product)->getCondition());
+    //         }
+
+    //         outputFile << "\n";
+    //     }
+
+    //     cout << "Data file saved successfully" << endl;
+    //     outputFile.close();
+    // }
+
+    // void LoadProduct(vector<Product *> &products) override
+    // {
+    //     ifstream inputFile("ProductData.txt");
+    //     if (!inputFile.is_open())
+    //     {
+    //         // If the file doesn't exist, create an empty file
+    //         ofstream outputFile("ProductData.txt");
+    //         if (!outputFile.is_open())
+    //         {
+    //             cout << "Error creating output file\n";
+    //             exit(1);
+    //         }
+    //         outputFile.close();
+
+    //         cout << "No existing data found. Created an empty file.\n";
+    //         return;
+    //     }
+
+    //     products.clear();
+
+    //     int productID, stock;
+    //     double price;
+    //     string productName, type;
+    //     int additionalInfo;
+
+    //     while (inputFile >> productID >> productName >> price >> stock >> type)
+    //     {
+    //         Product *newProduct = nullptr;
+
+    //         if (type == "N")
+    //         {
+    //             inputFile >> additionalInfo;
+    //             newProduct = new NewProduct(productID, productName, price, stock, Type::New, additionalInfo);
+    //             dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(additionalInfo);
+    //         }
+    //         else if (type == "U")
+    //         {
+    //             inputFile >> additionalInfo;
+    //             newProduct = new UsedProduct(productID, productName, price, stock, Type::Used, static_cast<Condition>(additionalInfo));
+    //         }
+
+    //         if (newProduct != nullptr)
+    //         {
+    //             products.push_back(newProduct);
+    //         }
+    //     }
+
+    //     inputFile.close();
+    //     cout << "Data file loaded successfully" << endl;
+    // }
+
+    void SaveProduct(const string &filename)
     {
-        ofstream outputFile("ProductData.txt");
-        if (!outputFile.is_open())
+        ofstream outFile(filename);
+        if (!outFile)
         {
-            cout << "Error creating output file\n";
-            exit(1);
+            cerr << "Error: Could not open file for writing." << std::endl;
+            return;
         }
 
         for (const auto &product : products)
         {
-            // Save product details to the file
-            outputFile << product->getProductID() << ","
-                       << product->getProductName() << ","
-                       << product->getPrice() << ","
-                       << product->getStock() << ","
-                       << (product->getType() == Type::New ? "N" : "U"); // Save product type
-
-            // Additional details based on product type
-            if (product->getType() == Type::New)
-            {
-                outputFile << "," << dynamic_cast<const NewProduct *>(product)->getWarrantyPeriod();
-            }
-            else if (product->getType() == Type::Used)
-            {
-                outputFile << "," << static_cast<int>(dynamic_cast<const UsedProduct *>(product)->getCondition());
-            }
-
-            outputFile << "\n";
+            outFile << product->productID << ","
+                    << product->name << ","
+                    << product->price << ","
+                    << product->stock_in << ","
+                    << (product->type == Type::New ? "N" : "U") << ","
+                    << (product->type == Type::New ? std::to_string(static_cast<int>(product->condition)) : "") << "\n";
         }
-
-        cout << "Data file saved successfully" << endl;
-        outputFile.close();
+        outFile << "NextProductID:" << NextProductID << "\n";
+        outFile.close();
     }
 
-    void LoadProduct(vector<Product *> &products) override
+    void LoadProduct(const std::string &filename)
     {
-        ifstream inputFile("ProductData.txt");
-        if (!inputFile.is_open())
-        {
-            // If the file doesn't exist, create an empty file
-            ofstream outputFile("ProductData.txt");
-            if (!outputFile.is_open())
-            {
-                cout << "Error creating output file\n";
-                exit(1);
-            }
-            outputFile.close();
+        ifstream inFile(filename);
 
-            cout << "No existing data found. Created an empty file.\n";
+        if (!inFile.is_open())
+        {
+            cerr << "Error: Could not open product list file." << endl;
             return;
         }
 
-        products.clear();
-
-        int productID, stock;
-        double price;
-        string productName, type;
-        int additionalInfo;
-
-        while (inputFile >> productID >> productName >> price >> stock >> type)
+        for (auto &product : products)
         {
-            Product *newProduct = nullptr;
+            delete product; // Delete existing products before loading new ones
+        }
+        products.clear();
+        NextProductID = 1; // Default to 1 if not found in the file
 
-            if (type == "N")
+        while (inFile)
+        {
+            string line;
+            if (!getline(inFile, line))
             {
-                inputFile >> additionalInfo;
-                newProduct = new NewProduct(productID, productName, price, stock, Type::New, additionalInfo);
-                dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(additionalInfo);
-            }
-            else if (type == "U")
-            {
-                inputFile >> additionalInfo;
-                newProduct = new UsedProduct(productID, productName, price, stock, Type::Used, static_cast<Condition>(additionalInfo));
+                break;
             }
 
-            if (newProduct != nullptr)
+            stringstream ss(line);
+            string field;
+            getline(ss, field, ',');
+
+            if (field == "NextProductID")
             {
-                products.push_back(newProduct);
+                getline(ss, field, ',');
+                NextProductID = stoi(field);
+                continue;
             }
+
+            Product *product = new Product;
+            product->productID = stoi(field);
+            getline(ss, product->name, ',');
+            ss >> product->price;
+            ss.ignore(); // Ignore the comma
+            ss >> product->stock_in;
+
+            // Additional details based on product type
+            string typeStr;
+            getline(ss, typeStr, ',');
+            product->type = (typeStr == "N") ? Type::New : Type::Used;
+
+            // Additional details based on product type
+            if (product->type == Type::New)
+            {
+                int condition;
+                ss >> condition;
+                product->condition = static_cast<Condition>(condition);
+            }
+
+            products.push_back(product);
         }
 
-        inputFile.close();
+        inFile.close();
         cout << "Data file loaded successfully" << endl;
     }
 };
