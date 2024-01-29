@@ -9,7 +9,7 @@ int main()
     Application app;
     app.run();
     cout << "\n\tSaving your data..." << endl;
-    sleep(2);
+    sleep(1);
     cout << "\tData saved successfully!" << endl;
 
     return 0;
