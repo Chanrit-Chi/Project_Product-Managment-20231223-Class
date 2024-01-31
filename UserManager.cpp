@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class AccountManager
+class UserManager
 {
 private:
     vector<User> users;

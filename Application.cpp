@@ -4,7 +4,7 @@
 #include "Product.cpp"
 #include "ProductManager.cpp"
 #include "User.cpp"
-#include "AccountManager.cpp"
+#include "UserManager.cpp"
 #include "Validator.cpp"
 
 using namespace std;
@@ -14,11 +14,53 @@ class Application
 private:
     vector<Product *> Products;
     ProductManager ProdManager;
-    AccountManager accountManager;
+    UserManager userManager;
+    User user;
     Validator ValidInput;
 
 public:
-    void run()
+    bool UserAuthenticationMenu()
+    {
+        while (true)
+        {
+            cout << "\tMenu:" << endl;
+            cout << "\t1. Create Account" << endl;
+            cout << "\t2. Login" << endl;
+            cout << "\t3. Exit" << endl;
+
+            int choice;
+            cout << "\tEnter your choice: ";
+            choice = ValidInput.getValidInput();
+
+            if (choice == 1)
+            {
+                userManager.userRegister();
+            }
+            else if (choice == 2)
+            {
+                userManager.login();
+
+                if (userManager.login())
+                {
+                    cout << "\tLogin successful!" << endl;
+                }
+                else
+                {
+                    cout << "\tLogin failed. Please check your username and password." << endl;
+                }
+            }
+            else if (choice == 3)
+            {
+                cout << "\tExiting program. Goodbye!" << endl;
+                break;
+            }
+            else
+            {
+                cout << "\tInvalid choice. Please enter a valid option." << endl;
+            }
+        }
+    }
+    void ProductMenu()
     {
         ProdManager.LoadProduct(Products);
         int choice;
@@ -79,5 +121,13 @@ public:
                 break;
             }
         } while (choice != 0);
+    }
+
+    void run()
+    {
+        if (UserAuthenticationMenu())
+        {
+            ProductMenu();
+        }
     }
 };

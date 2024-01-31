@@ -100,6 +100,10 @@ public:
     {
         return phone;
     }
+    bool authenticate(const string &inputName, const string &inputPassword) const
+    {
+        return (inputName == name && inputPassword == password);
+    }
 
     void displayUserInfo() const
     {
