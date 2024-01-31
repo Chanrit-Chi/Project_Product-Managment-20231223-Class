@@ -13,56 +13,27 @@ class Application
 {
 private:
     vector<Product *> Products;
+    vector<User> users;
     ProductManager ProdManager;
     UserManager userManager;
     User user;
     Validator ValidInput;
 
 public:
-    bool UserAuthenticationMenu()
+    bool isLogin = false;
+    void UserAuthenticationMenu()
     {
-        while (true)
-        {
-            cout << "\tMenu:" << endl;
-            cout << "\t1. Create Account" << endl;
-            cout << "\t2. Login" << endl;
-            cout << "\t3. Exit" << endl;
-
-            int choice;
-            cout << "\tEnter your choice: ";
-            choice = ValidInput.getValidInput();
-
-            if (choice == 1)
-            {
-                userManager.userRegister();
-            }
-            else if (choice == 2)
-            {
-                userManager.login();
-
-                if (userManager.login())
-                {
-                    cout << "\tLogin successful!" << endl;
-                }
-                else
-                {
-                    cout << "\tLogin failed. Please check your username and password." << endl;
-                }
-            }
-            else if (choice == 3)
-            {
-                cout << "\tExiting program. Goodbye!" << endl;
-                break;
-            }
-            else
-            {
-                cout << "\tInvalid choice. Please enter a valid option." << endl;
-            }
-        }
+        cout << "\tWelcome to product management tool."
+             << "\n"
+             << endl;
+        cout << "\tPlease register or login to continue." << endl;
+        cout << "\t1. Create Account" << endl;
+        cout << "\t2. Login" << endl;
+        cout << "\t0. Exit" << endl;
     }
     void ProductMenu()
     {
-        ProdManager.LoadProduct(Products);
+        // ProdManager.LoadProduct(Products);
         int choice;
         do
         {
@@ -125,9 +96,34 @@ public:
 
     void run()
     {
-        if (UserAuthenticationMenu())
+        int choice = 0;
+        userManager.LoadUser(users);
+        do
         {
-            ProductMenu();
-        }
+            UserAuthenticationMenu();
+            cout << "\n"
+                 << "\tEnter you choice: ";
+            choice = ValidInput.getValidInput();
+            switch (choice)
+            {
+            case 1:
+                userManager.userRegister();
+                break;
+            case 2:
+                if (userManager.login(users) == true)
+                {
+                    system("cls");
+                    ProdManager.LoadProduct(Products);
+                    ProductMenu();
+                }
+                break;
+            case 0:
+                exit(1);
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+                break;
+            }
+
+        } while (choice != 0);
     }
 };

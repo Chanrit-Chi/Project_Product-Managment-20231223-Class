@@ -473,12 +473,12 @@ public:
             ofstream outputFile("ProductData.txt");
             if (!outputFile.is_open())
             {
-                cout << "Error creating output file\n";
+                cout << "\tError creating output file\n";
                 exit(1);
             }
             outputFile.close();
 
-            cout << "No existing data found. Created an empty file.\n";
+            cout << "\tNo existing data found. Created an empty file.\n";
             return;
         }
 
@@ -512,6 +512,6 @@ public:
         }
 
         inputFile.close();
-        cout << "Data file loaded successfully" << endl;
+        cout << "\tData file loaded successfully" << endl;
     }
 };

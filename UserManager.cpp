@@ -1,35 +1,64 @@
 #pragma once
 #include <iostream>
+#include <algorithm>
 #include <fstream>
 #include <vector>
 #include "User.cpp"
-
+#include <algorithm>
 using namespace std;
 
 class UserManager
 {
 private:
     vector<User> users;
+    string loggedInUser;
 
 public:
-    bool login()
+    // bool login()
+    // {
+    //     string username, password;
+    //     cout << "\tEnter username: ";
+    //     cin >> username;
+    //     cout << "\tEnter password: ";
+    //     cin >> password;
+
+    //     for (const User &user : users)
+    //     {
+    //         if (user.getName() == username && user.getPassword() == password)
+    //         {
+    //             cout << "\tWelcome, " << username << "!" << endl;
+    //             return true;
+    //         }
+    //     }
+
+    //     system("cls");
+    //     cout << "\n"
+    //          << "\tUser not found or invalid credentials.\n"
+    //          << endl;
+    //     return false;
+    // }
+
+    bool
+    login(vector<User> &users)
     {
-        string username, password;
-        cout << "Enter username: ";
-        cin >> username;
-        cout << "Enter password: ";
-        cin >> password;
+        string enteredUsername, enteredPassword;
+        cout << "\tEnter username: ";
+        cin >> enteredUsername;
+        cout << "\tEnter password: ";
+        cin >> enteredPassword;
 
         for (const User &user : users)
         {
-            if (user.getName() == username && user.getPassword() == password)
+            string storedUsername = user.getName();
+            string storedPassword = user.getPassword();
+            if (storedUsername == enteredUsername && storedPassword == enteredPassword)
             {
-                cout << "Welcome, " << username << "!" << endl;
+                loggedInUser = user.getName();
                 return true;
             }
         }
-
-        cout << "User not found or invalid credentials." << endl;
+        system("cls");
+        cout << "\tUser not found or invalid credentials." << endl;
         return false;
     }
 
@@ -37,7 +66,7 @@ public:
     {
         string username, password, address, phone;
 
-        cout << "Enter username: ";
+        cout << "\tEnter username: ";
         cin >> username;
 
         // Check if username already exists
@@ -45,16 +74,17 @@ public:
         {
             if (user.getName() == username)
             {
-                cout << "Username already exists. Please choose a different username." << endl;
+                cout << "\tUsername already exists. Please choose a different username." << endl;
                 return;
             }
         }
 
-        cout << "Enter password: ";
+        cout << "\tEnter password: ";
         cin >> password;
-        cout << "Enter address: ";
-        cin >> address;
-        cout << "Enter phone: ";
+        cin.ignore();
+        cout << "\tEnter address: ";
+        getline(cin, address);
+        cout << "\tEnter phone: ";
         cin >> phone;
 
         users.emplace_back(username, password, address, phone);
@@ -62,7 +92,7 @@ public:
         ofstream fOut("UserData.dat", ios::app); // Append mode to add a new user
         if (!fOut.is_open())
         {
-            cerr << "Cannot open UserData.dat" << endl;
+            cerr << "\tCannot open UserData.dat" << endl;
             return;
         }
 
@@ -70,6 +100,29 @@ public:
 
         fOut.close();
 
-        cout << "Account created" << endl;
+        cout << "\tAccount created\n"
+             << endl;
+    }
+    void LoadUser(vector<User> &users)
+    {
+        ifstream inputFile("UserData.dat");
+        if (!inputFile.is_open())
+        {
+            cerr << "\tCannot open UserData.dat" << endl;
+            return;
+        }
+
+        users.clear(); // Clear existing users
+
+        string username, password, address, phone;
+        while (inputFile >> username >> password >> address >> phone)
+        {
+            users.emplace_back(username, password, address, phone);
+        }
+
+        inputFile.close();
+
+        cout << "\tUser data loaded successfully\n"
+             << endl;
     }
 };
