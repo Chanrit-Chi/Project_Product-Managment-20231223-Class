@@ -5,6 +5,7 @@
 #include <vector>
 #include "User.cpp"
 #include <algorithm>
+#include "Validator.cpp"
 using namespace std;
 
 class UserManager
@@ -12,32 +13,9 @@ class UserManager
 private:
     vector<User> users;
     string loggedInUser;
+    Validator validator;
 
 public:
-    // bool login()
-    // {
-    //     string username, password;
-    //     cout << "\tEnter username: ";
-    //     cin >> username;
-    //     cout << "\tEnter password: ";
-    //     cin >> password;
-
-    //     for (const User &user : users)
-    //     {
-    //         if (user.getName() == username && user.getPassword() == password)
-    //         {
-    //             cout << "\tWelcome, " << username << "!" << endl;
-    //             return true;
-    //         }
-    //     }
-
-    //     system("cls");
-    //     cout << "\n"
-    //          << "\tUser not found or invalid credentials.\n"
-    //          << endl;
-    //     return false;
-    // }
-
     bool
     login(vector<User> &users)
     {
@@ -124,5 +102,48 @@ public:
 
         cout << "\tUser data loaded successfully\n"
              << endl;
+    }
+    void deleteAccount(vector<User> &users)
+    {
+        char choice;
+        cout << "\tAre you sure you want to delete your account? y/n" << endl;
+        choice = validator.isValidCharType();
+        if (choice == 'y')
+        {
+            string username;
+            string password;
+            cout << "\tEnter your username: ";
+            cin >> username;
+            cout << "\tEnter password: ";
+            cin >> password;
+            bool found = false;
+            for (auto &user : users)
+            {
+                if (user.getName() == username && user.getPassword() == password)
+                {
+                    users.erase(remove(users.begin(), users.end(), user), users.end());
+                    cout << "\tAccount deleted successfully." << endl;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                cout << "\tInvalid username or password. Account not deleted." << endl;
+            }
+        }
+        else
+        {
+            cout << "\tAccount not deleted." << endl;
+        }
+    }
+
+    void updateBankAccount(vector<User> &users)
+    {
+        for (auto &user : users)
+        {
+            cout << "\tSelect the field you want to update: ";
+            cout << "\t1. "
+        }
     }
 };

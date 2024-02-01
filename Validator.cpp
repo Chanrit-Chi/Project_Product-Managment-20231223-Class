@@ -106,4 +106,20 @@ public:
             }
         }
     }
+    // Validate char type
+    char isValidCharType()
+    {
+        char choice;
+        do
+        {
+            cout << "\tEnter your choice: " << endl;
+            cin >> choice;
+            choice = tolower(choice);
+            if (choice != 'y' && choice != 'n')
+            {
+                cout << "Invalid choice. Please enter y for Yes or n for No." << endl;
+            }
+        } while (choice != 'y' && choice != 'n');
+        return choice;
+    }
 };

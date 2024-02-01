@@ -29,6 +29,7 @@ public:
         cout << "\tPlease register or login to continue." << endl;
         cout << "\t1. Create Account" << endl;
         cout << "\t2. Login" << endl;
+        cout << "\t3. View Account" << endl;
         cout << "\t0. Exit" << endl;
     }
     void ProductMenu()
@@ -117,6 +118,19 @@ public:
                     ProductMenu();
                 }
                 break;
+            case 3:
+                system("cls");
+                cout << "\tPlease login to continue!\n"
+                     << endl;
+                cout << "\tPlease enter your username and password: "
+                     << "\n"
+                     << endl;
+
+                if (userManager.login(users)==true)
+                    {
+
+                    }
+
             case 0:
                 exit(1);
             default:
