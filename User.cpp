@@ -104,13 +104,4 @@ public:
     {
         return (inputName == name && inputPassword == password);
     }
-
-    void displayUserInfo() const
-    {
-        cout << "Name: " << setw(20) << name
-             << "Password: " << setw(20) << password
-             << "Address: " << setw(20) << address
-             << "Phone: " << setw(20) << phone << endl;
-    }
-
 };

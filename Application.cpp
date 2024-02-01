@@ -29,7 +29,8 @@ public:
         cout << "\tPlease register or login to continue." << endl;
         cout << "\t1. Create Account" << endl;
         cout << "\t2. Login" << endl;
-        cout << "\t3. View Account" << endl;
+        cout << "\t3. View Account info" << endl;
+        cout << "\t4. Go to product menu" << endl;
         cout << "\t0. Exit" << endl;
     }
     void ProductMenu()
@@ -98,7 +99,7 @@ public:
     void run()
     {
         int choice = 0;
-        userManager.LoadUser(users);
+        userManager.LoadUser();
         do
         {
             UserAuthenticationMenu();
@@ -111,7 +112,7 @@ public:
                 userManager.userRegister();
                 break;
             case 2:
-                if (userManager.login(users) == true)
+                if (userManager.login() == true)
                 {
                     system("cls");
                     ProdManager.LoadProduct(Products);
@@ -126,18 +127,49 @@ public:
                      << "\n"
                      << endl;
 
-                if (userManager.login(users)==true)
+                if (userManager.login() == true)
+                {
+                    int choice;
+                    cout << "\tAccount Menu:\n"
+                         << endl;
+                    cout << "\t1. View account" << endl;
+                    cout << "\t2. Delete account" << endl;
+                    cout << "\t0. Exit" << endl;
+                    cout << "Please enter a choice: ";
+                    choice = ValidInput.getValidInput();
+                    switch (choice)
                     {
+                    case 1:
+                        userManager.displayUserInfo(0);
+                        return;
+                    case 2:
+                        userManager.deleteAccount();
+                        break;
 
+                    case 0:
+                        return;
+                    default:
+                        break;
                     }
+                }
+            case 4:
+                if (userManager.login() == false)
+                {
+                    cout << "Please login to continue." << endl;
+                    return;
+                }
+                else
+                {
+                    ProductMenu();
+                }
 
+                break;
             case 0:
                 exit(1);
             default:
                 cout << "Invalid choice. Please try again." << endl;
                 break;
             }
-
         } while (choice != 0);
     }
 };
