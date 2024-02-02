@@ -112,50 +112,65 @@ public:
                 userManager.userRegister();
                 break;
             case 2:
+                cout << "\tPlease login to continue: \n"
+                     << endl;
                 if (userManager.login() == true)
                 {
                     system("cls");
                     ProdManager.LoadProduct(Products);
                     ProductMenu();
                 }
+                else
+                {
+                    return;
+                }
                 break;
             case 3:
-                system("cls");
-                cout << "\tPlease login to continue!\n"
-                     << endl;
-                cout << "\tPlease enter your username and password: "
-                     << "\n"
-                     << endl;
-
-                if (userManager.login() == true)
+                int choice;
+                do
                 {
-                    int choice;
-                    cout << "\tAccount Menu:\n"
+                    system("cls");
+                    cout << "\tPlease login to continue!\n"
                          << endl;
-                    cout << "\t1. View account" << endl;
-                    cout << "\t2. Delete account" << endl;
-                    cout << "\t0. Exit" << endl;
-                    cout << "Please enter a choice: ";
-                    choice = ValidInput.getValidInput();
-                    switch (choice)
-                    {
-                    case 1:
-                        userManager.displayUserInfo(0);
-                        return;
-                    case 2:
-                        userManager.deleteAccount();
-                        break;
+                    cout << "\tPlease enter your username and password: "
+                         << "\n"
+                         << endl;
 
-                    case 0:
-                        return;
-                    default:
-                        break;
+                    if (userManager.login() == true)
+                    {
+                        do
+                        {
+                            cout << "\tAccount Menu:\n"
+                                 << endl;
+                            cout << "\t1. View account" << endl;
+                            cout << "\t2. Delete account" << endl;
+                            cout << "\t0. Exit" << endl;
+                            cout << "\tPlease enter a choice: ";
+                            choice = ValidInput.getValidInput();
+                            switch (choice)
+                            {
+                            case 1:
+                                userManager.displayUserInfo(0);
+                                cout << "\n"
+                                     << "\tPress Enter key to continue..." << endl;
+                                cin.get();
+                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                break;
+                            case 2:
+                                userManager.deleteAccount();
+                                break;
+                            case 0:
+                                return; // Exit the account menu
+                            default:
+                                break;
+                            }
+                        } while (true); // Continue looping until explicitly exited
                     }
-                }
+                } while (true); // Continue looping until explicitly exited
             case 4:
                 if (userManager.login() == false)
                 {
-                    cout << "Please login to continue." << endl;
+                    cout << "\tPlease login to continue." << endl;
                     return;
                 }
                 else
@@ -167,7 +182,7 @@ public:
             case 0:
                 exit(1);
             default:
-                cout << "Invalid choice. Please try again." << endl;
+                cout << "\tInvalid choice. Please try again." << endl;
                 break;
             }
         } while (choice != 0);

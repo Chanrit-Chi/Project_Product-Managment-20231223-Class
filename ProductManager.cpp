@@ -512,6 +512,6 @@ public:
         }
 
         inputFile.close();
-        cout << "\tData file loaded successfully" << endl;
+        // cout << "\tData file loaded successfully" << endl;
     }
 };

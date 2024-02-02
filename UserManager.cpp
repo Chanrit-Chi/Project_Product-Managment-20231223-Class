@@ -11,6 +11,7 @@ class UserManager
 private:
     vector<User> users;
     string loggedInUser;
+    bool isLogin;
     Validator validator;
 
 public:
@@ -92,8 +93,8 @@ public:
 
         inputFile.close();
 
-        cout << "\tUser data loaded successfully\n"
-             << endl;
+        // cout << "\tUser data loaded successfully\n"
+        //<< endl;
     }
 
     void saveUser()
@@ -116,7 +117,7 @@ public:
     void deleteAccount()
     {
         char choice;
-        cout << "\tAre you sure you want to delete your account? y/n: ";
+        cout << "\tAre you sure you want to delete your account? y/n: " << endl;
         choice = validator.isValidCharType();
         if (choice == 'y')
         {
@@ -132,7 +133,8 @@ public:
             {
                 users.erase(it, users.end());
                 saveUser();
-                loggedInUser == "";
+                loggedInUser = "";
+                isLogin = false;
                 cout << "\tAccount deleted successfully." << endl;
                 return;
             }
@@ -152,13 +154,11 @@ public:
         if (index < users.size())
         {
             const User &user = users[index];
-            cout << "Name: " << user.getName() << endl;
-            cout << " Password: " << user.getPassword() << endl;
-            cout << " Address: " << user.getAddress() << endl;
-            cout << " Phone: " << user.getPhone() << endl;
-
-            cout << "\tPress any key to continue...";
-            cin.ignore();
+            cout << "\tAccount information." << endl;
+            cout << "\tName: " << user.getName() << endl;
+            cout << "\tPassword: " << user.getPassword() << endl;
+            cout << "\tAddress: " << user.getAddress() << endl;
+            cout << "\tPhone: " << user.getPhone() << endl;
         }
         else
         {

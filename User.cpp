@@ -41,7 +41,7 @@ public:
         }
         else
         {
-            cout << "Name cannot be empty. Please enter a name." << endl;
+            cout << "\tName cannot be empty. Please enter a name." << endl;
         }
     }
 
@@ -58,7 +58,7 @@ public:
         }
         else
         {
-            cout << "Password must be at least 5 characters long." << endl;
+            cout << "\tPassword must be at least 5 characters long." << endl;
         }
     }
 
@@ -75,7 +75,7 @@ public:
         }
         else
         {
-            cout << "Address cannot be empty. Please enter an address." << endl;
+            cout << "\tAddress cannot be empty. Please enter an address." << endl;
         }
     }
 
@@ -92,7 +92,7 @@ public:
         }
         else
         {
-            cout << "Invalid phone number format. Please use numeric characters only." << endl;
+            cout << "\tInvalid phone number format. Please use numeric characters only." << endl;
         }
     }
 
