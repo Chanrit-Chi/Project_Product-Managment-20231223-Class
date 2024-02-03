@@ -131,6 +131,10 @@ public:
         {
             product->GetDisplay();
         }
+        cout << "\nPress Enter key to continue...";
+        while (cin.get() != '\n')
+            ;
+        system("cls");
     }
 
     // Function overloading to seach product by ID and name
@@ -355,7 +359,7 @@ public:
                 {
                     cout << "\tInvalid choice." << endl;
                 }
-            } while (choice != 'n' || choice != 'y');
+            } while (choice != 'n' && choice != 'y');
         }
         else
         {
@@ -389,7 +393,9 @@ public:
             cout << "\t\nPlease select the sorting order:\n"
                  << "\t1. Sort by Ascending\n"
                  << "\t2. Sort by Descending\n"
-                 << "\t0. Exit\n";
+                 << "\t0. Exit\n"
+                 << endl;
+            cout << "\tPlease select an option: ";
             int sortOption = validateNum.getValidInput();
 
             if (sortOption != 0)
@@ -434,7 +440,8 @@ public:
 
     void SaveProduct(const vector<Product *> &products) const override
     {
-        ofstream outputFile("ProductData.txt", ios::app);
+        ofstream outputFile("ProductData.txt");
+
         if (!outputFile.is_open())
         {
             cout << "Error creating output file\n";
@@ -462,7 +469,9 @@ public:
 
             outputFile << "\n";
         }
+
         outputFile.close();
+        cout << "\tSaved " << products.size() << " products." << endl;
     }
 
     void LoadProduct(vector<Product *> &products) override
@@ -488,40 +497,37 @@ public:
             int additionalInfo = 0; // Default value in case conversion fails
 
             // Read each value separated by commas
-            while (getline(iss, value, ','))
+            getline(iss, value, ',');
+            if (value.empty())
             {
-                switch (value.size())
-                {
-                case 1:
-                    // Assuming it's a single character (type)
-                    type = value;
-                    break;
-                default:
-                    // Attempt to convert to an integer for additionalInfo
-                    if (all_of(value.begin(), value.end(), ::isdigit)) // Check if all characters are digits
-                    {
-                        additionalInfo = stoi(value);
-                    }
-                    else
-                    {
-                        // Handle the case when it's not a valid integer
-                        cout << "\tSkipping non-integer value '" << value << "' for additionalInfo.\n";
-                    }
-                    break;
-                case 2:
-                    // Assuming it's a string or double
-                    if (value.find('.') != string::npos)
-                    {
-                        // Assuming it's a double
-                        price = stod(value);
-                    }
-                    else
-                    {
-                        // Assuming it's a string (productName)
-                        productName = value;
-                    }
-                    break;
-                }
+                cout << "\tError reading product data\n";
+                continue;
+            }
+            productID = stoi(value);
+
+            getline(iss, productName, ',');
+            getline(iss, value, ',');
+            price = stod(value);
+
+            getline(iss, value, ',');
+            stock = stoi(value);
+
+            getline(iss, type, ',');
+            if (type != "N" && type != "U")
+            {
+                cout << "\tError reading product type\n";
+                continue;
+            }
+
+            if (type == "N")
+            {
+                getline(iss, value, ',');
+                additionalInfo = stoi(value);
+            }
+            else if (type == "U")
+            {
+                getline(iss, value, ',');
+                additionalInfo = stoi(value);
             }
 
             // Create and add the product based on the parsed values

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <unistd.h>
 #include "Product.cpp"
 #include "ProductManager.cpp"
 #include "User.cpp"
@@ -86,6 +87,7 @@ public:
             case 0:
             {
                 ProdManager.SaveProduct(Products);
+                system("cls");
                 return;
             }
 
@@ -97,6 +99,7 @@ public:
 
     void BeforeLoginMenu()
     {
+        system("cls");
         cout << "\tWelcome to product management tool.\n"
              << "\tPlease register or login to continue.\n"
              << "\t1. Create Account\n"
@@ -111,56 +114,68 @@ public:
         cout << "\t1. Product Menu" << endl;
         cout << "\t2. View Account" << endl;
         cout << "\t3. Delete Account" << endl;
-        cout << "\t0. Exit" << endl;
+        cout << "\t0. Logout" << endl;
     }
 
     void run()
     {
-        int choice = 0;
+        int choice;
+        bool loggedIn = false;
+
         userManager.LoadUser();
         ProdManager.LoadProduct(Products);
 
         do
         {
-            if (userManager.isLoggedIn())
+            if (loggedIn)
             {
+                // User is logged in
                 AfterLoginMenu();
-                cout << "\n"
-                     << "\tEnter your choice: ";
+                cout << "\n\tEnter your choice: ";
                 choice = ValidInput.getValidInput();
 
                 switch (choice)
                 {
                 case 1:
                     ProductMenu();
+                    system("cls");
                     break;
                 case 2:
                     userManager.displayUserInfo(0);
-                    cout << "\n"
-                         << "\tPress Enter key to continue..." << endl;
-                    cin.get();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\n\tPress Enter key to continue...";
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    char enterKey;
+                    cin.get(enterKey);
+                    system("cls");
                     break;
                 case 3:
                     userManager.deleteAccount();
+                    loggedIn = false; // User logged out
+                    system("cls");
                     break;
                 case 0:
-                    return;
+                    userManager.loggedOut();
+                    system("cls");
+                    loggedIn = false; // User logged out
+                    break;
                 default:
                     break;
                 }
             }
             else
             {
+                // User is not logged in
                 BeforeLoginMenu();
-                cout << "\n"
-                     << "\tEnter your choice: ";
-                choice = ValidInput.getValidInput();
+                cout << "\n\tEnter your choice: ";
+                int innerChoice;
+                innerChoice = ValidInput.getValidInput();
 
-                switch (choice)
+                switch (innerChoice)
                 {
                 case 1:
                     userManager.userRegister();
+                    system("cls");
+                    loggedIn = true; // User registered/logged in
                     break;
                 case 2:
                     while (!userManager.login())
@@ -168,15 +183,26 @@ public:
                         cout << "\tUser not found or invalid credentials. Please try again.\n"
                              << endl;
                     }
-
-                    break; // Removed the call to ProductMenu here
+                    loggedIn = true; // User registered/logged in
+                    break;
                 case 0:
-                    exit(1); // Exit the application
+                    cout << "\n\tSaving your data..." << endl;
+                    sleep(1);
+                    cout << "\tData saved successfully!" << endl;
+                    break;
                 default:
                     cout << "\tInvalid choice. Please try again." << endl;
                     break;
                 }
             }
-        } while (choice != 0);
+
+            // Display welcome menu after logging out or completing an action
+            if (!loggedIn)
+            {
+                system("cls");
+                BeforeLoginMenu();
+            }
+
+        } while (true);
     }
 };

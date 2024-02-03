@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unistd.h>
 #include "User.cpp"
 #include "Validator.cpp"
 using namespace std;
@@ -14,33 +15,57 @@ private:
     Validator validator;
 
 public:
-    bool isLogin;
     UserManager()
     {
-        LoadUser(); // Load user data when UserManager is created
+        LoadUser();
     }
+
     bool isLoggedIn() const
     {
         return !loggedInUser.empty();
     }
+
+    void loggedOut()
+    {
+        cout << "\tLogging out user: " << loggedInUser << endl;
+        loggedInUser = "";
+    }
+
     bool login()
     {
-        string enteredUsername, enteredPassword;
-        cout << "\tEnter username: ";
-        cin >> enteredUsername;
-        cout << "\tEnter password: ";
-        cin >> enteredPassword;
+        const int maxAttempts = 5;
 
-        for (const User &user : users)
+        for (int attempt = 1; attempt <= maxAttempts; ++attempt)
         {
-            string storedUsername = user.getName();
-            string storedPassword = user.getPassword();
-            if (storedUsername == enteredUsername && storedPassword == enteredPassword)
+            string enteredUsername, enteredPassword;
+            cout << "\tEnter username: ";
+            cin >> enteredUsername;
+            cout << "\tEnter password: ";
+            cin >> enteredPassword;
+
+            for (const User &user : users)
             {
-                loggedInUser = user.getName();
-                return true;
+                string storedUsername = user.getName();
+                string storedPassword = user.getPassword();
+                if (storedUsername == enteredUsername && storedPassword == enteredPassword)
+                {
+                    loggedInUser = user.getName();
+                    system("cls");
+                    return true; // Successful login
+                }
+            }
+
+            // Incorrect credentials, allow for another attempt
+            cout << "\tIncorrect username or password. Please try again." << endl;
+
+            if (attempt == maxAttempts)
+            {
+                cout << "\tToo many login attempts. Exiting..." << endl;
+                sleep(1);
+                exit(0);
             }
         }
+
         return false;
     }
 
@@ -135,7 +160,7 @@ public:
                 users.erase(it, users.end());
                 saveUser();
                 loggedInUser = "";
-                isLogin = false;
+                loggedOut();
                 cout << "\tAccount deleted successfully." << endl;
                 return;
             }
