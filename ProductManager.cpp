@@ -10,6 +10,7 @@
 #include "NewProduct.cpp"
 #include "ConditionEnum.h"
 #include <fstream>
+#include <cctype>
 using namespace std;
 
 class ProductManager : public ProductDAO
@@ -469,38 +470,94 @@ public:
         ifstream inputFile("ProductData.txt");
         if (!inputFile.is_open())
         {
-            // Handle the case when the file cannot be opened
             cout << "\tError opening ProductData.txt\n";
             return;
         }
 
-        products.clear(); // Clear existing products
+        products.clear();
 
-        int productID, stock;
-        double price;
-        string productName, type;
-        int additionalInfo;
-
-        while (inputFile >> productID >> productName >> price >> stock >> type)
+        string line;
+        while (getline(inputFile, line))
         {
-            cout << "Read: " << productID << " " << productName << " " << price << " " << stock << " " << type << endl;
+            istringstream iss(line);
+            string value;
+
+            int productID, stock;
+            double price;
+            string productName, type;
+            int additionalInfo = 0; // Default value in case conversion fails
+
+            // Read each value separated by commas
+            while (getline(iss, value, ','))
+            {
+                switch (value.size())
+                {
+                case 1:
+                    // Assuming it's a single character (type)
+                    type = value;
+                    break;
+                default:
+                    // Attempt to convert to an integer for additionalInfo
+                    if (all_of(value.begin(), value.end(), ::isdigit)) // Check if all characters are digits
+                    {
+                        additionalInfo = stoi(value);
+                    }
+                    else
+                    {
+                        // Handle the case when it's not a valid integer
+                        cout << "\tSkipping non-integer value '" << value << "' for additionalInfo.\n";
+                    }
+                    break;
+                case 2:
+                    // Assuming it's a string or double
+                    if (value.find('.') != string::npos)
+                    {
+                        // Assuming it's a double
+                        price = stod(value);
+                    }
+                    else
+                    {
+                        // Assuming it's a string (productName)
+                        productName = value;
+                    }
+                    break;
+                }
+            }
+
+            // Create and add the product based on the parsed values
             Product *newProduct = nullptr;
 
-            if (type == "N")
+            try
             {
-                inputFile >> additionalInfo;
-                newProduct = new NewProduct(productID, productName, price, stock, Type::New, additionalInfo);
-                dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(additionalInfo);
-            }
-            else if (type == "U")
-            {
-                inputFile >> additionalInfo;
-                newProduct = new UsedProduct(productID, productName, price, stock, Type::Used, static_cast<Condition>(additionalInfo));
-            }
+                if (type == "N")
+                {
+                    newProduct = new NewProduct(productID, productName, price, stock, Type::New, additionalInfo);
+                    dynamic_cast<NewProduct *>(newProduct)->SetWarrantyPeriod(additionalInfo);
+                }
+                else if (type == "U")
+                {
+                    newProduct = new UsedProduct(productID, productName, price, stock, Type::Used, static_cast<Condition>(additionalInfo));
+                }
 
-            if (newProduct != nullptr)
+                if (newProduct != nullptr)
+                {
+                    products.push_back(newProduct);
+                    cout << "Read: " << productID << " " << productName << " " << price << " " << stock << " " << type << " " << additionalInfo << " - Product added\n";
+                }
+                else
+                {
+                    cout << "Read: " << productID << " " << productName << " " << price << " " << stock << " " << type << " " << additionalInfo << " - Failed to create product\n";
+                }
+            }
+            catch (const std::exception &e)
             {
-                products.push_back(newProduct);
+                cout << "\tError creating product: " << e.what() << endl;
+                for (const auto &product : products)
+                {
+                    delete product;
+                }
+                products.clear();
+                return;
             }
         }
 
