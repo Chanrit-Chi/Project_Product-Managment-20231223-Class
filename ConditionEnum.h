@@ -2,8 +2,8 @@
 
 enum class Condition
 {
-    Good,
-    Bad
+    Good = 1,
+    Bad = 2
 };
 
 enum class Type

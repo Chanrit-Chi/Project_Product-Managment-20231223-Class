@@ -14,12 +14,12 @@ class Application
 private:
     vector<Product *> Products;
     vector<User> users;
-    ProductManager ProdManager;
     UserManager userManager;
     User user;
     Validator ValidInput;
 
 public:
+    ProductManager ProdManager;
     bool isLogin = false;
     void UserAuthenticationMenu()
     {
@@ -35,7 +35,6 @@ public:
     }
     void ProductMenu()
     {
-        // ProdManager.LoadProduct(Products);
         int choice;
         do
         {
@@ -96,94 +95,87 @@ public:
         } while (choice != 0);
     }
 
+    void BeforeLoginMenu()
+    {
+        cout << "\tWelcome to product management tool.\n"
+             << "\tPlease register or login to continue.\n"
+             << "\t1. Create Account\n"
+             << "\t2. Login\n"
+             << "\t0. Exit\n";
+    }
+
+    void AfterLoginMenu()
+    {
+        cout << "\n\tUser Management Menu:\n"
+             << endl;
+        cout << "\t1. Product Menu" << endl;
+        cout << "\t2. View Account" << endl;
+        cout << "\t3. Delete Account" << endl;
+        cout << "\t0. Exit" << endl;
+    }
+
     void run()
     {
         int choice = 0;
         userManager.LoadUser();
+        ProdManager.LoadProduct(Products);
+
         do
         {
-            UserAuthenticationMenu();
-            cout << "\n"
-                 << "\tEnter you choice: ";
-            choice = ValidInput.getValidInput();
-            switch (choice)
+            if (userManager.isLoggedIn())
             {
-            case 1:
-                userManager.userRegister();
-                break;
-            case 2:
-                cout << "\tPlease login to continue: \n"
-                     << endl;
-                if (userManager.login() == true)
-                {
-                    system("cls");
-                    ProdManager.LoadProduct(Products);
-                    ProductMenu();
-                }
-                else
-                {
-                    return;
-                }
-                break;
-            case 3:
-                int choice;
-                do
-                {
-                    system("cls");
-                    cout << "\tPlease login to continue!\n"
-                         << endl;
-                    cout << "\tPlease enter your username and password: "
-                         << "\n"
-                         << endl;
+                AfterLoginMenu();
+                cout << "\n"
+                     << "\tEnter your choice: ";
+                choice = ValidInput.getValidInput();
 
-                    if (userManager.login() == true)
+                switch (choice)
+                {
+                case 1:
+                    ProductMenu();
+                    break;
+                case 2:
+                    userManager.displayUserInfo(0);
+                    cout << "\n"
+                         << "\tPress Enter key to continue..." << endl;
+                    cin.get();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    break;
+                case 3:
+                    userManager.deleteAccount();
+                    break;
+                case 0:
+                    return;
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                BeforeLoginMenu();
+                cout << "\n"
+                     << "\tEnter your choice: ";
+                choice = ValidInput.getValidInput();
+
+                switch (choice)
+                {
+                case 1:
+                    userManager.userRegister();
+                    break;
+                case 2:
+                    while (!userManager.login())
                     {
-                        do
-                        {
-                            cout << "\tAccount Menu:\n"
-                                 << endl;
-                            cout << "\t1. View account" << endl;
-                            cout << "\t2. Delete account" << endl;
-                            cout << "\t0. Exit" << endl;
-                            cout << "\tPlease enter a choice: ";
-                            choice = ValidInput.getValidInput();
-                            switch (choice)
-                            {
-                            case 1:
-                                userManager.displayUserInfo(0);
-                                cout << "\n"
-                                     << "\tPress Enter key to continue..." << endl;
-                                cin.get();
-                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                break;
-                            case 2:
-                                userManager.deleteAccount();
-                                break;
-                            case 0:
-                                return; // Exit the account menu
-                            default:
-                                break;
-                            }
-                        } while (true); // Continue looping until explicitly exited
+                        cout << "\tUser not found or invalid credentials. Please try again.\n"
+                             << endl;
                     }
-                } while (true); // Continue looping until explicitly exited
-            case 4:
-                if (userManager.login() == false)
-                {
-                    cout << "\tPlease login to continue." << endl;
-                    return;
-                }
-                else
-                {
-                    ProductMenu();
-                }
 
-                break;
-            case 0:
-                exit(1);
-            default:
-                cout << "\tInvalid choice. Please try again." << endl;
-                break;
+                    break; // Removed the call to ProductMenu here
+                case 0:
+                    exit(1); // Exit the application
+                default:
+                    cout << "\tInvalid choice. Please try again." << endl;
+                    break;
+                }
             }
         } while (choice != 0);
     }

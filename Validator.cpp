@@ -112,7 +112,7 @@ public:
         char choice;
         do
         {
-            cout << "\tEnter your choice: " << endl;
+            cout << "\tEnter your choice: ";
             cin >> choice;
             choice = tolower(choice);
             if (choice != 'y' && choice != 'n')

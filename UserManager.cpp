@@ -11,15 +11,18 @@ class UserManager
 private:
     vector<User> users;
     string loggedInUser;
-    bool isLogin;
     Validator validator;
 
 public:
+    bool isLogin;
     UserManager()
     {
         LoadUser(); // Load user data when UserManager is created
     }
-
+    bool isLoggedIn() const
+    {
+        return !loggedInUser.empty();
+    }
     bool login()
     {
         string enteredUsername, enteredPassword;
@@ -38,8 +41,6 @@ public:
                 return true;
             }
         }
-
-        cout << "\tUser not found or invalid credentials." << endl;
         return false;
     }
 

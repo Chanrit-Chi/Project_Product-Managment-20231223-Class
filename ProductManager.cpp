@@ -433,7 +433,7 @@ public:
 
     void SaveProduct(const vector<Product *> &products) const override
     {
-        ofstream outputFile("ProductData.txt");
+        ofstream outputFile("ProductData.txt", ios::app);
         if (!outputFile.is_open())
         {
             cout << "Error creating output file\n";
@@ -469,20 +469,12 @@ public:
         ifstream inputFile("ProductData.txt");
         if (!inputFile.is_open())
         {
-            // If the file doesn't exist, create an empty file
-            ofstream outputFile("ProductData.txt");
-            if (!outputFile.is_open())
-            {
-                cout << "\tError creating output file\n";
-                exit(1);
-            }
-            outputFile.close();
-
-            cout << "\tNo existing data found. Created an empty file.\n";
+            // Handle the case when the file cannot be opened
+            cout << "\tError opening ProductData.txt\n";
             return;
         }
 
-        products.clear();
+        products.clear(); // Clear existing products
 
         int productID, stock;
         double price;
@@ -491,6 +483,7 @@ public:
 
         while (inputFile >> productID >> productName >> price >> stock >> type)
         {
+            cout << "Read: " << productID << " " << productName << " " << price << " " << stock << " " << type << endl;
             Product *newProduct = nullptr;
 
             if (type == "N")
@@ -512,6 +505,7 @@ public:
         }
 
         inputFile.close();
-        // cout << "\tData file loaded successfully" << endl;
+
+        cout << "\tLoaded " << products.size() << " products." << endl;
     }
 };
