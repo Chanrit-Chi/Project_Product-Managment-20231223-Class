@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <regex>
 #include <string>
 #include "ConditionEnum.h"
@@ -66,13 +67,24 @@ public:
     }
     // Validate Input numeric data
     int getValidInput()
-    { // This is to put constrain on number input
+    {
         int input;
-        while (!(cin >> input))
+        while (true)
         {
-            cin.clear();                                         // Clear the error state
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear the input buffer
-            cout << "\tInvalid input. Please enter a valid option: ";
+            try
+            {
+                if (!(cin >> input))
+                {
+                    throw runtime_error("Invalid input. Please enter a valid integer.");
+                }
+                break; // Break the loop if the input is valid
+            }
+            catch (const exception &e)
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << e.what() << " Please try again: ";
+            }
         }
         return input;
     }
@@ -82,10 +94,9 @@ public:
     {
         while (true)
         {
-
-            Type type;
-            if (cin >> newTypeChar)
+            try
             {
+                Type type;
                 switch (tolower(newTypeChar))
                 {
                 case 'n':
@@ -95,31 +106,42 @@ public:
                     type = Type::Used;
                     return true;
                 default:
-                    cout << "\tInvalid product type! Please try again." << endl;
+                    throw invalid_argument("Invalid product type! Please try again.");
                 }
             }
-            else
+            catch (const exception &e)
             {
-                cout << "\tInvalid input! Please enter a single character (n/N or u/U)." << endl;
+                cout << e.what() << endl;
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "\tEnter a valid product type (n/N or u/U): ";
+                cin >> newTypeChar;
             }
         }
     }
+
     // Validate char type
     char isValidCharType()
     {
         char choice;
         do
         {
-            cout << "\tEnter your choice: ";
-            cin >> choice;
-            choice = tolower(choice);
-            if (choice != 'y' && choice != 'n')
+            try
             {
-                cout << "Invalid choice. Please enter y for Yes or n for No." << endl;
+                cout << "\tEnter your choice: ";
+                cin >> choice;
+                choice = tolower(choice);
+                if (choice != 'y' && choice != 'n')
+                {
+                    throw invalid_argument("Invalid choice. Please enter y for Yes or n for No.");
+                }
+                break; // Break the loop if the input is valid
             }
-        } while (choice != 'y' && choice != 'n');
+            catch (const exception &e)
+            {
+                cout << e.what() << endl;
+            }
+        } while (true);
         return choice;
     }
 };
